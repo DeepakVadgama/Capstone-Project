@@ -16,6 +16,19 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    productFlavors {
+        dev {
+            // dev utilizes minSDKVersion = 21 to allow the Android gradle plugin
+            // to pre-dex each module and produce an APK that can be tested on
+            // Android Lollipop without time consuming dex merging processes.
+            minSdkVersion 21
+        }
+        prod {
+            minSdkVersion 16
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
