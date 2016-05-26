@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.deepakvadgama.radhekrishnabhakti.dummy.DummyContent;
+import com.deepakvadgama.radhekrishnabhakti.pojo.Content;
 
 import java.util.List;
 
@@ -72,9 +73,9 @@ public class ItemListActivity extends AppCompatActivity {
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<Content> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
+        public SimpleItemRecyclerViewAdapter(List<Content> items) {
             mValues = items;
         }
 
@@ -89,14 +90,14 @@ public class ItemListActivity extends AppCompatActivity {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
             holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mContentView.setText(mValues.get(position).text);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(ItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        arguments.putInt(ItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
                         ItemDetailFragment fragment = new ItemDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -122,7 +123,7 @@ public class ItemListActivity extends AppCompatActivity {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
+            public Content mItem;
 
             public ViewHolder(View view) {
                 super(view);
