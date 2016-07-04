@@ -27,6 +27,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.deepakvadgama.radhekrishnabhakti.ItemListActivity"/>
         </activity>
+
+        <provider
+            android:authorities="com.deepakvadgama.radhekrishnabhakti"
+            android:name=".data.ContentProvider"/>
     </application>
 
 </manifest>

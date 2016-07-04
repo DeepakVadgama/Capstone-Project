@@ -8,6 +8,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
+import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.CONTENT_AUTHORITY;
+import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.ContentEntry;
+import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.FavoritesEntry;
+import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.PATH_CONTENT;
+import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.PATH_FAVORITE;
+
 public class ContentProvider extends android.content.ContentProvider {
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
@@ -27,36 +33,25 @@ public class ContentProvider extends android.content.ContentProvider {
 
         // We need this join for favorite (left outer join)
         queryBuilder.setTables(
-                DatabaseContract.ContentEntry.TABLE_NAME + " LEFT OUTER JOIN " +
-                        DatabaseContract.FavoritesEntry.TABLE_NAME +
-                        " ON " + DatabaseContract.ContentEntry.TABLE_NAME +
-                        "." + DatabaseContract.ContentEntry._ID +
-                        " = " + DatabaseContract.FavoritesEntry.TABLE_NAME +
-                        "." + DatabaseContract.FavoritesEntry.COLUMN_CONTENT_ID);
+                ContentEntry.TABLE_NAME + " LEFT OUTER JOIN " +
+                        FavoritesEntry.TABLE_NAME +
+                        " ON " + ContentEntry.TABLE_NAME +
+                        "." + ContentEntry._ID +
+                        " = " + FavoritesEntry.TABLE_NAME +
+                        "." + FavoritesEntry.COLUMN_CONTENT_ID);
     }
 
-    private static final String sTitleSelection =
-            DatabaseContract.ContentEntry.TABLE_NAME +
-                    "." + DatabaseContract.ContentEntry.COLUMN_TITLE + " = ? ";
-    private static final String sTypeSelection =
-            DatabaseContract.ContentEntry.TABLE_NAME +
-                    "." + DatabaseContract.ContentEntry.COLUMN_TYPE + " = ? ";
-    private static final String sAuthorSelection =
-            DatabaseContract.ContentEntry.TABLE_NAME +
-                    "." + DatabaseContract.ContentEntry.COLUMN_AUTHOR + " = ? ";
-    private static final String sSearchSelection =
-            DatabaseContract.ContentEntry.TABLE_NAME +
-                    "." + DatabaseContract.ContentEntry.COLUMN_AUTHOR + " = ? OR " +
-                    DatabaseContract.ContentEntry.TABLE_NAME +
-                    "." + DatabaseContract.ContentEntry.COLUMN_TITLE + " = ? OR " +
-                    DatabaseContract.ContentEntry.TABLE_NAME +
-                    "." + DatabaseContract.ContentEntry.COLUMN_TYPE + " = ? OR " +
-                    DatabaseContract.ContentEntry.TABLE_NAME +
-                    "." + DatabaseContract.ContentEntry.COLUMN_TEXT + " = ? ";
+    private static final String sTitleSelection = ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_TITLE + " like ? ";
+    private static final String sTypeSelection = ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_TYPE + " = ? ";
+    private static final String sAuthorSelection = ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_AUTHOR + " like ? ";
+    private static final String sSearchSelection = ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_AUTHOR + " = ? OR " +
+            ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_TITLE + " like ? OR " +
+            ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_TYPE + " = ? OR " +
+            ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_TEXT + " like ? ";
 
     private Cursor getContentBySearch(Uri uri, String[] projection, String sortOrder) {
 
-        String searchText = DatabaseContract.ContentEntry.getSearchFromUri(uri);
+        String searchText = ContentEntry.getSearchFromUri(uri);
         String[] selectionArgs = new String[]{searchText, "%" + searchText + "%", searchText, "%" + searchText + "%"};
         String selection = sSearchSelection;
 
@@ -72,7 +67,7 @@ public class ContentProvider extends android.content.ContentProvider {
 
     private Cursor getContentByTitle(Uri uri, String[] projection, String sortOrder) {
 
-        String title = DatabaseContract.ContentEntry.getTitleFromUri(uri);
+        String title = ContentEntry.getTitleFromUri(uri);
         String[] selectionArgs = new String[]{"%" + title + "%"};
         String selection = sTitleSelection;
 
@@ -88,7 +83,7 @@ public class ContentProvider extends android.content.ContentProvider {
 
     private Cursor getContentByType(Uri uri, String[] projection, String sortOrder) {
 
-        String type = DatabaseContract.ContentEntry.getTypeFromUri(uri);
+        String type = ContentEntry.getTypeFromUri(uri);
         String[] selectionArgs = new String[]{type};
         String selection = sTypeSelection;
 
@@ -104,7 +99,7 @@ public class ContentProvider extends android.content.ContentProvider {
 
     private Cursor getContentByAuthor(Uri uri, String[] projection, String sortOrder) {
 
-        String author = DatabaseContract.ContentEntry.getAuthorFromUri(uri);
+        String author = ContentEntry.getAuthorFromUri(uri);
         String[] selectionArgs = new String[]{"%" + author + "%"};
         String selection = sAuthorSelection;
 
@@ -124,14 +119,14 @@ public class ContentProvider extends android.content.ContentProvider {
         // found.  The code passed into the constructor represents the code to return for the root
         // URI.  It's common to use NO_MATCH as the code for this case.
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
-        final String authority = DatabaseContract.CONTENT_AUTHORITY;
+        final String authority = CONTENT_AUTHORITY;
 
-        matcher.addURI(authority, DatabaseContract.PATH_CONTENT, CONTENT);
-        matcher.addURI(authority, DatabaseContract.PATH_CONTENT + "/" + DatabaseContract.ContentEntry.COLUMN_TYPE, CONTENT_WITH_TYPE);
-        matcher.addURI(authority, DatabaseContract.PATH_CONTENT + "/" + DatabaseContract.ContentEntry.COLUMN_TITLE, CONTENT_WITH_TITLE);
-        matcher.addURI(authority, DatabaseContract.PATH_CONTENT + "/" + DatabaseContract.ContentEntry.COLUMN_AUTHOR, CONTENT_WITH_AUTHOR);
-        matcher.addURI(authority, DatabaseContract.PATH_CONTENT + "/" + DatabaseContract.ContentEntry.SEARCH, CONTENT_WITH_SEARCH);
-        matcher.addURI(authority, DatabaseContract.PATH_FAVORITE, FAVORITES);
+        matcher.addURI(authority, PATH_CONTENT, CONTENT);
+        matcher.addURI(authority, PATH_CONTENT + "/" + ContentEntry.COLUMN_TYPE, CONTENT_WITH_TYPE);
+        matcher.addURI(authority, PATH_CONTENT + "/" + ContentEntry.COLUMN_TITLE, CONTENT_WITH_TITLE);
+        matcher.addURI(authority, PATH_CONTENT + "/" + ContentEntry.COLUMN_AUTHOR, CONTENT_WITH_AUTHOR);
+        matcher.addURI(authority, PATH_CONTENT + "/" + ContentEntry.SEARCH, CONTENT_WITH_SEARCH);
+        matcher.addURI(authority, PATH_FAVORITE, FAVORITES);
         return matcher;
     }
 
@@ -149,15 +144,17 @@ public class ContentProvider extends android.content.ContentProvider {
 
         switch (match) {
             case CONTENT_WITH_SEARCH:
-                return DatabaseContract.ContentEntry.CONTENT_TYPE;
+                return ContentEntry.CONTENT_TYPE;
+            case CONTENT_WITH_AUTHOR:
+                return ContentEntry.CONTENT_TYPE;
             case CONTENT_WITH_TITLE:
-                return DatabaseContract.ContentEntry.CONTENT_TYPE;
+                return ContentEntry.CONTENT_TYPE;
             case CONTENT_WITH_TYPE:
-                return DatabaseContract.ContentEntry.CONTENT_TYPE;
+                return ContentEntry.CONTENT_TYPE;
             case CONTENT:
-                return DatabaseContract.ContentEntry.CONTENT_TYPE;
+                return ContentEntry.CONTENT_TYPE;
             case FAVORITES:
-                return DatabaseContract.FavoritesEntry.CONTENT_TYPE;
+                return FavoritesEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -194,7 +191,7 @@ public class ContentProvider extends android.content.ContentProvider {
             // "content"
             case CONTENT: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
-                        DatabaseContract.ContentEntry.TABLE_NAME,
+                        ContentEntry.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -208,7 +205,7 @@ public class ContentProvider extends android.content.ContentProvider {
             // "favorites"
             case FAVORITES: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
-                        DatabaseContract.FavoritesEntry.TABLE_NAME,
+                        FavoritesEntry.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -234,17 +231,17 @@ public class ContentProvider extends android.content.ContentProvider {
 
         switch (match) {
             case CONTENT: {
-                long _id = db.insert(DatabaseContract.ContentEntry.TABLE_NAME, null, values);
+                long _id = db.insert(ContentEntry.TABLE_NAME, null, values);
                 if (_id > 0)
-                    returnUri = DatabaseContract.ContentEntry.buildContentUri(_id);
+                    returnUri = ContentEntry.buildContentUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
             }
             case FAVORITES: {
-                long _id = db.insert(DatabaseContract.FavoritesEntry.TABLE_NAME, null, values);
+                long _id = db.insert(FavoritesEntry.TABLE_NAME, null, values);
                 if (_id > 0)
-                    returnUri = DatabaseContract.FavoritesEntry.buildFavoriteUri(_id);
+                    returnUri = FavoritesEntry.buildFavoriteUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
@@ -266,11 +263,11 @@ public class ContentProvider extends android.content.ContentProvider {
         switch (match) {
             case CONTENT:
                 rowsDeleted = db.delete(
-                        DatabaseContract.ContentEntry.TABLE_NAME, selection, selectionArgs);
+                        ContentEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             case FAVORITES:
                 rowsDeleted = db.delete(
-                        DatabaseContract.FavoritesEntry.TABLE_NAME, selection, selectionArgs);
+                        FavoritesEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -291,11 +288,11 @@ public class ContentProvider extends android.content.ContentProvider {
 
         switch (match) {
             case CONTENT:
-                rowsUpdated = db.update(DatabaseContract.ContentEntry.TABLE_NAME, values, selection,
+                rowsUpdated = db.update(ContentEntry.TABLE_NAME, values, selection,
                         selectionArgs);
                 break;
             case FAVORITES:
-                rowsUpdated = db.update(DatabaseContract.FavoritesEntry.TABLE_NAME, values, selection,
+                rowsUpdated = db.update(FavoritesEntry.TABLE_NAME, values, selection,
                         selectionArgs);
                 break;
             default:
@@ -317,7 +314,7 @@ public class ContentProvider extends android.content.ContentProvider {
                 int returnCount = 0;
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DatabaseContract.ContentEntry.TABLE_NAME, null, value);
+                        long _id = db.insert(ContentEntry.TABLE_NAME, null, value);
                         if (_id != -1) {
                             returnCount++;
                         }
