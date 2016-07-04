@@ -57,22 +57,22 @@ public class DatabaseContract {
         public static final String COLUMN_AUTHOR = "author";
         public static final String COLUMN_URL = "url";
         public static final String COLUMN_TEXT = "text";
-        public static final String ANY = "any";
+        public static final String SEARCH = "search";
 
         public static Uri buildContentSearchWithType(String type) {
-            return CONTENT_URI.buildUpon().appendQueryParameter(COLUMN_TYPE, type).build();
+            return CONTENT_URI.buildUpon().appendPath(COLUMN_TYPE).appendQueryParameter(COLUMN_TYPE, type).build();
         }
 
         public static Uri buildContentSearchWithAuthor(String author) {
-            return CONTENT_URI.buildUpon().appendQueryParameter(COLUMN_AUTHOR, author).build();
+            return CONTENT_URI.buildUpon().appendPath(COLUMN_AUTHOR).appendQueryParameter(COLUMN_AUTHOR, author).build();
         }
 
         public static Uri buildContentSearchWithTitle(String title) {
-            return CONTENT_URI.buildUpon().appendQueryParameter(COLUMN_TITLE, title).build();
+            return CONTENT_URI.buildUpon().appendPath(COLUMN_TITLE).appendQueryParameter(COLUMN_TITLE, title).build();
         }
 
         public static Uri buildContentSearchWithAny(String title) {
-            return CONTENT_URI.buildUpon().appendQueryParameter(ANY, title).build();
+            return CONTENT_URI.buildUpon().appendPath(SEARCH).appendQueryParameter(SEARCH, title).build();
         }
 
         public static String getTitleFromUri(Uri uri) {
@@ -88,7 +88,7 @@ public class DatabaseContract {
         }
 
         public static String getSearchFromUri(Uri uri) {
-            return uri.getQueryParameter(ANY);
+            return uri.getQueryParameter(SEARCH);
         }
 
         public static Uri buildContentUri(long id) {

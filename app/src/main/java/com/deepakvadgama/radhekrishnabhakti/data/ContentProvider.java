@@ -127,10 +127,10 @@ public class ContentProvider extends android.content.ContentProvider {
         final String authority = DatabaseContract.CONTENT_AUTHORITY;
 
         matcher.addURI(authority, DatabaseContract.PATH_CONTENT, CONTENT);
-        matcher.addURI(authority, DatabaseContract.PATH_CONTENT + "/type/*", CONTENT_WITH_TYPE);
-        matcher.addURI(authority, DatabaseContract.PATH_CONTENT + "/title/*", CONTENT_WITH_TITLE);
-        matcher.addURI(authority, DatabaseContract.PATH_CONTENT + "/author/*", CONTENT_WITH_AUTHOR);
-        matcher.addURI(authority, DatabaseContract.PATH_CONTENT + "/search/*", CONTENT_WITH_SEARCH);
+        matcher.addURI(authority, DatabaseContract.PATH_CONTENT + "/" + DatabaseContract.ContentEntry.COLUMN_TYPE, CONTENT_WITH_TYPE);
+        matcher.addURI(authority, DatabaseContract.PATH_CONTENT + "/" + DatabaseContract.ContentEntry.COLUMN_TITLE, CONTENT_WITH_TITLE);
+        matcher.addURI(authority, DatabaseContract.PATH_CONTENT + "/" + DatabaseContract.ContentEntry.COLUMN_AUTHOR, CONTENT_WITH_AUTHOR);
+        matcher.addURI(authority, DatabaseContract.PATH_CONTENT + "/" + DatabaseContract.ContentEntry.SEARCH, CONTENT_WITH_SEARCH);
         matcher.addURI(authority, DatabaseContract.PATH_FAVORITE, FAVORITES);
         return matcher;
     }
