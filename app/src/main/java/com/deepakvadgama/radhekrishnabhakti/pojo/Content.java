@@ -8,6 +8,7 @@ public class Content {
     public String author;
     public String url;
     public String text;
+    public boolean isFavorite;
 
     public Content() {
 
@@ -31,6 +32,7 @@ public class Content {
                 ", author='" + author + '\'' +
                 ", url='" + url + '\'' +
                 ", text='" + text + '\'' +
+                ", isFavorite=" + isFavorite +
                 '}';
     }
 }
