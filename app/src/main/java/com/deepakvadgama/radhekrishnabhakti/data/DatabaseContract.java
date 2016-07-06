@@ -31,6 +31,17 @@ public class DatabaseContract {
     public static final String CONTENT_AUTHORITY = "com.deepakvadgama.radhekrishnabhakti";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
+    public static final String[] CONTENT_COLUMNS = {
+            ContentEntry.TABLE_NAME + "." + ContentEntry._ID,
+            ContentEntry.COLUMN_TYPE,
+            ContentEntry.COLUMN_TITLE,
+            ContentEntry.COLUMN_AUTHOR,
+            ContentEntry.COLUMN_URL,
+            ContentEntry.COLUMN_TEXT,
+            FavoritesEntry.COLUMN_CONTENT_ID
+    };
+
+
     public static final class FavoritesEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_FAVORITE).build();

@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Radhe</string>
     <string name="title_item_detail">Item Detail</string>
+
+    <!-- SyncAdapter related -->
+    <string name="sync_account_type">radhekrishnabhakti.deepakvadgama.com</string>
+    <string name="content_authority">com.deepakvadgama.radhekrishnabhakti.app</string>
+
 </resources>
