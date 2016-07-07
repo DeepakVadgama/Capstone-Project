@@ -35,4 +35,5 @@ public class Content {
                 ", isFavorite=" + isFavorite +
                 '}';
     }
+
 }
