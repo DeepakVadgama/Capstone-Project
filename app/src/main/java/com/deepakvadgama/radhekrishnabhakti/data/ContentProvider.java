@@ -35,10 +35,10 @@ public class ContentProvider extends android.content.ContentProvider {
         queryBuilder.setTables(
                 ContentEntry.TABLE_NAME + " LEFT OUTER JOIN " +
                         FavoritesEntry.TABLE_NAME +
-                        " ON " + ContentEntry.TABLE_NAME +
+                        " ON (" + ContentEntry.TABLE_NAME +
                         "." + ContentEntry._ID +
                         " = " + FavoritesEntry.TABLE_NAME +
-                        "." + FavoritesEntry.COLUMN_CONTENT_ID);
+                        "." + FavoritesEntry.COLUMN_CONTENT_ID + ")");
     }
 
     private static final String sTitleSelection = ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_TITLE + " like ? ";
@@ -112,6 +112,7 @@ public class ContentProvider extends android.content.ContentProvider {
                 sortOrder
         );
     }
+
 
     static UriMatcher buildUriMatcher() {
 
@@ -190,8 +191,7 @@ public class ContentProvider extends android.content.ContentProvider {
 
             // "content"
             case CONTENT: {
-                retCursor = mOpenHelper.getReadableDatabase().query(
-                        ContentEntry.TABLE_NAME,
+                retCursor = queryBuilder.query(mOpenHelper.getReadableDatabase(),
                         projection,
                         selection,
                         selectionArgs,
@@ -222,6 +222,7 @@ public class ContentProvider extends android.content.ContentProvider {
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return retCursor;
     }
+
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {

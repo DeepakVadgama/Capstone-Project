@@ -37,7 +37,6 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
     // 60 seconds (1 minute)  120 = 2 hours
     public static final int SYNC_INTERVAL = 60 * 120;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
-    private Retrofit mRetrofit;
     private RetrofitService mService;
 
     public ContentSyncAdapter(Context context, boolean autoInitialize) {
@@ -51,7 +50,7 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     private void initRetrofit() {
-        mRetrofit = new Retrofit.Builder()
+        Retrofit mRetrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.SERVER_ADDRESS)
                 .build();
         mService = mRetrofit.create(RetrofitService.class);
@@ -121,9 +120,12 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private void populateFavorites() {
         try {
-            final List<Content> list = mService.getFavorites(Utility.getEmail(getContext())).execute().body();
-            if (!list.isEmpty()) {
-                insertFavoritesIntoDB(list);
+            final String email = Utility.getEmail(getContext());
+            if (email != null) {
+                final List<Content> list = mService.getFavorites(email).execute().body();
+                if (!list.isEmpty()) {
+                    insertFavoritesIntoDB(list);
+                }
             }
         } catch (IOException e) {
             Log.e(LOG_TAG, e.getMessage(), e);

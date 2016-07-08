@@ -7,6 +7,8 @@
     <string name="sync_account_type">radhekrishnabhakti.deepakvadgama.com</string>
     <string name="content_authority">com.deepakvadgama.radhekrishnabhakti.app</string>
 
+    <string name="server_client_id">9983882915–45gqc5hr3fln53bj8psu01hvbpqh0buu.apps.googleusercontent.com</string>
+
     <!-- Preferences -->
     <string name="pref_user_email" translatable="false">EMAIL</string>
     <string name="pref_user_name" translatable="false">USERNAME</string>

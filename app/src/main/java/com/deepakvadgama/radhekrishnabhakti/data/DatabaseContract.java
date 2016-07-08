@@ -33,12 +33,12 @@ public class DatabaseContract {
 
     public static final String[] CONTENT_COLUMNS = {
             ContentEntry.TABLE_NAME + "." + ContentEntry._ID,
-            ContentEntry.COLUMN_TYPE,
-            ContentEntry.COLUMN_TITLE,
-            ContentEntry.COLUMN_AUTHOR,
-            ContentEntry.COLUMN_URL,
-            ContentEntry.COLUMN_TEXT,
-            FavoritesEntry.COLUMN_CONTENT_ID
+            ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_TYPE,
+            ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_TITLE,
+            ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_AUTHOR,
+            ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_URL,
+            ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_TEXT,
+            FavoritesEntry.TABLE_NAME + "." + FavoritesEntry.COLUMN_CONTENT_ID
     };
 
 

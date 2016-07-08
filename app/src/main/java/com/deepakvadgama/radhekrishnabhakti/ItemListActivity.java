@@ -2,12 +2,14 @@ package com.deepakvadgama.radhekrishnabhakti;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.ListView;
 
 import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
@@ -16,7 +18,6 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
@@ -29,6 +30,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
  * item details side-by-side using two vertical panes.
  */
 public class ItemListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, GoogleApiClient.OnConnectionFailedListener {
+
+    public final String LOG_TAG = ItemListActivity.class.getSimpleName();
 
     private static final int CONTENT_LOADER = 0;
     private static final int REQUEST_CODE = 10;
@@ -75,32 +78,41 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
         // Configure sign-in to request the user's ID, email address, and basic profile. ID and
         // basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
+//                .requestIdToken(getString(R.string.server_client_id))
+                .requestProfile()
                 .build();
 
         // Build a GoogleApiClient with access to GoogleSignIn.API and the options above.
-        mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, this).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
 
-        Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
-                false, null, null, null, null);
-        startActivityForResult(intent, REQUEST_CODE);
+//        Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
+//                false, null, null, null, null);
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, REQUEST_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE) { //&& resultCode == RESULT_OK
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+//            String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
             handleSignInResult(result);
+        } else if (requestCode == REQUEST_CODE && resultCode == RESULT_CANCELED) {
+            // TODO: If account is not chosen.
+//            Toast.makeText(this, R.string.pick_account, Toast.LENGTH_LONG).show();
         }
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount();
-//            mFullName = acct.getDisplayName();
-//            mEmail = acct.getEmail();
-//            mPhotoUrl = acct.getPhotoUrl();
-            // Store in settings.
+            String personName = acct.getDisplayName();
+            String personEmail = acct.getEmail();
+            String personId = acct.getId();
+            Uri personPhoto = acct.getPhotoUrl();
         }
     }
 
@@ -130,5 +142,6 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         // TODO: Failed to connect to Google.
+        Log.e(LOG_TAG, "Failed to connect to Google");
     }
 }
