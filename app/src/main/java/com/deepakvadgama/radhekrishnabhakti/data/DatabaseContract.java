@@ -28,7 +28,7 @@ public class DatabaseContract {
     public static final String PATH_CONTENT = "content";
     public static final String PATH_FAVORITE = "favorite";
 
-    public static final String CONTENT_AUTHORITY = "com.deepakvadgama.radhekrishnabhakti";
+    public static final String CONTENT_AUTHORITY = "com.deepakvadgama.radhekrishnabhakti.app";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     public static final String[] CONTENT_COLUMNS = {

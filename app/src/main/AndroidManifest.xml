@@ -43,7 +43,7 @@
                 android:value="com.deepakvadgama.radhekrishnabhakti.ItemListActivity"/>
         </activity>
         <provider
-            android:authorities="com.deepakvadgama.radhekrishnabhakti"
+            android:authorities="@string/content_authority"
             android:name=".data.ContentProvider"
             android:exported="false"
             android:syncable="true"/>

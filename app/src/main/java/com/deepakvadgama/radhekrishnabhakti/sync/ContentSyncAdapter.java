@@ -25,7 +25,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.ContentEntry;
 
@@ -50,8 +53,22 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     private void initRetrofit() {
+
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        // set your desired log level
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        // add your other interceptors …
+
+        // add logging as last interceptor
+        httpClient.addInterceptor(logging);  // <-- this is the important line!
+
+
         Retrofit mRetrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.SERVER_ADDRESS)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
                 .build();
         mService = mRetrofit.create(RetrofitService.class);
     }
