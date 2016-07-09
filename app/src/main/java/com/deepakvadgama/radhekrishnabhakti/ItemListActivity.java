@@ -75,11 +75,8 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
     }
 
     private void selectGoogleAccount() {
-        // Configure sign-in to request the user's ID, email address, and basic profile. ID and
-        // basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestIdToken(getString(R.string.server_client_id))
-                .requestProfile()
+                .requestIdToken(getString(R.string.server_client_id))
                 .build();
 
         // Build a GoogleApiClient with access to GoogleSignIn.API and the options above.
@@ -88,17 +85,14 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-//        Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
-//                false, null, null, null, null);
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, REQUEST_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE) { //&& resultCode == RESULT_OK
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-//            String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
             handleSignInResult(result);
         } else if (requestCode == REQUEST_CODE && resultCode == RESULT_CANCELED) {
             // TODO: If account is not chosen.
@@ -111,8 +105,9 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
             GoogleSignInAccount acct = result.getSignInAccount();
             String personName = acct.getDisplayName();
             String personEmail = acct.getEmail();
-            String personId = acct.getId();
             Uri personPhoto = acct.getPhotoUrl();
+            String idToken = acct.getIdToken();
+            // TODO: Save in shared preferences
         }
     }
 
