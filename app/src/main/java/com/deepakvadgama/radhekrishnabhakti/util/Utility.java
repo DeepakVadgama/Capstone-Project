@@ -27,4 +27,25 @@ public class Utility {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(context.getString(R.string.pref_user_email), null);
     }
+
+    public static String getName(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(context.getString(R.string.pref_user_name), null);
+    }
+
+    public static String getProfileUrl(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(context.getString(R.string.pref_user_url), null);
+    }
+
+    public static void storeUserProfile(Context context, String email, String name, String url) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(context.getString(R.string.pref_user_email), email);
+        editor.putString(context.getString(R.string.pref_user_name), name);
+        editor.putString(context.getString(R.string.pref_user_url), url);
+        editor.commit();
+    }
+
+
 }

@@ -14,6 +14,7 @@ import android.widget.ListView;
 
 import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
 import com.deepakvadgama.radhekrishnabhakti.sync.ContentSyncAdapter;
+import com.deepakvadgama.radhekrishnabhakti.util.Utility;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -76,7 +77,8 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
 
     private void selectGoogleAccount() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.server_client_id))
+//                .requestIdToken(getString(R.string.server_client_id))
+                .requestProfile()
                 .build();
 
         // Build a GoogleApiClient with access to GoogleSignIn.API and the options above.
@@ -103,11 +105,13 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount();
-            String personName = acct.getDisplayName();
-            String personEmail = acct.getEmail();
-            Uri personPhoto = acct.getPhotoUrl();
-            String idToken = acct.getIdToken();
-            // TODO: Save in shared preferences
+            String name = acct.getDisplayName();
+            String email = acct.getEmail();
+            Uri photoUrl = acct.getPhotoUrl();
+            Utility.storeUserProfile(this, email, name, photoUrl.toString());
+
+            // To be used for phase 2.
+            // String idToken = acct.getIdToken();
         }
     }
 

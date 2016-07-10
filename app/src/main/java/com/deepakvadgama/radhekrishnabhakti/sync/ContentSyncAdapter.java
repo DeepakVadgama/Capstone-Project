@@ -7,11 +7,13 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.deepakvadgama.radhekrishnabhakti.BuildConfig;
@@ -64,12 +66,12 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
         // add logging as last interceptor
         httpClient.addInterceptor(logging);  // <-- this is the important line!
 
-
         Retrofit mRetrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.SERVER_ADDRESS)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build())
                 .build();
+
         mService = mRetrofit.create(RetrofitService.class);
     }
 
@@ -84,11 +86,21 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
         if (latestId == -1) {
             populateFavorites();
         }
+
+        // Set timestamp of sync
+        saveTimestampOfSync();
+    }
+
+    private void saveTimestampOfSync() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong(getContext().getString(R.string.pref_last_notification), System.currentTimeMillis());
+        editor.commit();
     }
 
     private void populateContent(int latestId) {
         try {
-            final List<Content> list = mService.getContent(latestId).execute().body();
+            final List<Content> list = mService.getContent(latestId + 1).execute().body();
             if (!list.isEmpty()) {
                 insertContentIntoDB(list);
             }
