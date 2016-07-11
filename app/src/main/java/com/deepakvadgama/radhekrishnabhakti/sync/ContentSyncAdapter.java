@@ -152,7 +152,7 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
             final String email = Utility.getEmail(getContext());
             if (email != null) {
                 final List<Content> list = mService.getFavorites(email).execute().body();
-                if (!list.isEmpty()) {
+                if (list != null && !list.isEmpty()) {
                     insertFavoritesIntoDB(list);
                 }
             }
