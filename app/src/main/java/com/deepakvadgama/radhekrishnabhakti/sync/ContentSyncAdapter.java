@@ -25,6 +25,7 @@ import com.deepakvadgama.radhekrishnabhakti.util.PreferenceUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -87,8 +88,47 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
             populateFavorites();
         }
 
+        // Synchronize favorites with server
+        if (isFavoritesUpdated()) {
+            syncFavoritesWithServer();
+        }
+
         // Set timestamp of sync
         saveTimestampOfSync();
+    }
+
+    private void syncFavoritesWithServer() {
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final String email = prefs.getString(getContext().getString(R.string.pref_user_email), null);
+
+        if (email != null) {
+
+            // Sync newly added favorites
+            final Set<String> addedFavorites = prefs.getStringSet(getContext().getString(R.string.pref_favorites_added), null);
+            if (addedFavorites != null) {
+                mService.addFavorites(email, addedFavorites);
+            }
+
+            // Sync recently removed favorites
+            final Set<String> removedFavorites = prefs.getStringSet(getContext().getString(R.string.pref_favorites_removed), null);
+            if (removedFavorites != null) {
+                mService.removeFavorites(email, removedFavorites);
+            }
+
+            // Reset flag
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean(getContext().getString(R.string.pref_favorites_updated), false);
+            editor.remove(getContext().getString(R.string.pref_favorites_added));
+            editor.remove(getContext().getString(R.string.pref_favorites_removed));
+            editor.commit();
+        }
+
+    }
+
+    private boolean isFavoritesUpdated() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        return prefs.getBoolean(getContext().getString(R.string.pref_favorites_updated), false);
     }
 
     private void saveTimestampOfSync() {
@@ -106,7 +146,6 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
             }
         } catch (IOException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
-            // This is first time sync so tell UI
             // TODO: Analytics
         }
     }
@@ -171,7 +210,6 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
         List<ContentValues> favorites = new ArrayList<>();
         for (Content record : list) {
             ContentValues content = new ContentValues();
-            content.put(FavoritesEntry._ID, record.id);
             content.put(FavoritesEntry.COLUMN_CONTENT_ID, record.id);
             favorites.add(content);
         }

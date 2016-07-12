@@ -21,6 +21,9 @@ import android.preference.PreferenceManager;
 
 import com.deepakvadgama.radhekrishnabhakti.R;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class PreferenceUtil {
 
     public static String getEmail(Context context) {
@@ -47,5 +50,20 @@ public class PreferenceUtil {
         editor.commit();
     }
 
+    public static void addToFavorites(Context context, int id) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        final Set<String> stringSet = prefs.getStringSet(context.getString(R.string.pref_favorites_added), new HashSet<String>());
+        stringSet.add(String.valueOf(id));
+        editor.putStringSet(context.getString(R.string.pref_favorites_added), stringSet);
+    }
 
+
+    public static void removeFromFavorites(Context context, int id) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        final Set<String> stringSet = prefs.getStringSet(context.getString(R.string.pref_favorites_added), new HashSet<String>());
+        stringSet.remove(String.valueOf(id));
+        editor.putStringSet(context.getString(R.string.pref_favorites_added), stringSet);
+    }
 }

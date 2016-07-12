@@ -40,8 +40,9 @@ public class DbHelper extends SQLiteOpenHelper {
 
         // No foreign key constraint. This will help when user gets favorites (ids) on fresh device with same
         // email id. In that case, the content might not be present but we still need to store favorites.
-        final String SQL_CREATE_FAVORITES_TABLE = "CREATE TABLE " + FavoritesEntry.TABLE_NAME
-                + " (" + FavoritesEntry.COLUMN_CONTENT_ID + " INTEGER NOT NULL )";
+        final String SQL_CREATE_FAVORITES_TABLE = "CREATE TABLE " + FavoritesEntry.TABLE_NAME + " ("
+                + FavoritesEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + FavoritesEntry.COLUMN_CONTENT_ID + " INTEGER NOT NULL )";
 
         final String SQL_CREATE_CONTENT_TABLE = "CREATE TABLE " + ContentEntry.TABLE_NAME + " (" +
                 ContentEntry._ID + " INTEGER PRIMARY KEY," +
