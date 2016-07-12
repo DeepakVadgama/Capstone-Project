@@ -30,17 +30,17 @@ public class NotificationUtil {
 //                double low = cursor.getDouble(INDEX_MIN_TEMP);
 //                String desc = cursor.getString(INDEX_SHORT_DESC);
 //
-//                int iconId = Utility.getIconResourceForWeatherCondition(weatherId);
+//                int iconId = PreferenceUtil.getIconResourceForWeatherCondition(weatherId);
 //                Resources resources = context.getResources();
 //                Bitmap largeIcon = BitmapFactory.decodeResource(resources,
-//                        Utility.getArtResourceForWeatherCondition(weatherId));
+//                        PreferenceUtil.getArtResourceForWeatherCondition(weatherId));
 //                String title = context.getString(R.string.app_name);
 //
 //                // Define the text of the forecast.
 //                String contentText = String.format(context.getString(R.string.format_notification),
 //                        desc,
-//                        Utility.formatTemperature(context, high),
-//                        Utility.formatTemperature(context, low));
+//                        PreferenceUtil.formatTemperature(context, high),
+//                        PreferenceUtil.formatTemperature(context, low));
 //
 //                // TODO: Format based on content type
 //

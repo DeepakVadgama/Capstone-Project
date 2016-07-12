@@ -25,6 +25,10 @@ import android.provider.BaseColumns;
  */
 public class DatabaseContract {
 
+    public static enum ContentType {QUOTE, PICTURE, STORY, LECTURE, KIRTAN}
+
+    ;
+
     public static final String PATH_CONTENT = "content";
     public static final String PATH_FAVORITE = "favorite";
 

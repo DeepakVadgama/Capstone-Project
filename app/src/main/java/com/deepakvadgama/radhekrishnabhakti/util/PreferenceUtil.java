@@ -21,7 +21,7 @@ import android.preference.PreferenceManager;
 
 import com.deepakvadgama.radhekrishnabhakti.R;
 
-public class Utility {
+public class PreferenceUtil {
 
     public static String getEmail(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

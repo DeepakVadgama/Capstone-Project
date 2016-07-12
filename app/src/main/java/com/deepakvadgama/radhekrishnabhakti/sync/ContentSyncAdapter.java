@@ -18,10 +18,9 @@ import android.util.Log;
 
 import com.deepakvadgama.radhekrishnabhakti.BuildConfig;
 import com.deepakvadgama.radhekrishnabhakti.R;
-import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
 import com.deepakvadgama.radhekrishnabhakti.pojo.Content;
 import com.deepakvadgama.radhekrishnabhakti.util.NotificationUtil;
-import com.deepakvadgama.radhekrishnabhakti.util.Utility;
+import com.deepakvadgama.radhekrishnabhakti.util.PreferenceUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,6 +32,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.ContentEntry;
+import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.FavoritesEntry;
 
 public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
 
@@ -149,7 +149,7 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private void populateFavorites() {
         try {
-            final String email = Utility.getEmail(getContext());
+            final String email = PreferenceUtil.getEmail(getContext());
             if (email != null) {
                 final List<Content> list = mService.getFavorites(email).execute().body();
                 if (list != null && !list.isEmpty()) {
@@ -164,15 +164,15 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
     private void insertFavoritesIntoDB(List<Content> list) {
         List<ContentValues> contentList = convertToFavorites(list);
         final ContentValues[] array = contentList.toArray(new ContentValues[contentList.size()]);
-        getContext().getContentResolver().bulkInsert(DatabaseContract.FavoritesEntry.CONTENT_URI, array);
+        getContext().getContentResolver().bulkInsert(FavoritesEntry.CONTENT_URI, array);
     }
 
     private List<ContentValues> convertToFavorites(List<Content> list) {
         List<ContentValues> favorites = new ArrayList<>();
         for (Content record : list) {
             ContentValues content = new ContentValues();
-            content.put(DatabaseContract.FavoritesEntry._ID, record.id);
-            content.put(DatabaseContract.FavoritesEntry.COLUMN_CONTENT_ID, record.id);
+            content.put(FavoritesEntry._ID, record.id);
+            content.put(FavoritesEntry.COLUMN_CONTENT_ID, record.id);
             favorites.add(content);
         }
         return favorites;

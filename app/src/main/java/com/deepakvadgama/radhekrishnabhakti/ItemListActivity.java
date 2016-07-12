@@ -14,7 +14,7 @@ import android.widget.ListView;
 
 import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
 import com.deepakvadgama.radhekrishnabhakti.sync.ContentSyncAdapter;
-import com.deepakvadgama.radhekrishnabhakti.util.Utility;
+import com.deepakvadgama.radhekrishnabhakti.util.PreferenceUtil;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -108,7 +108,7 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
             String name = acct.getDisplayName();
             String email = acct.getEmail();
             Uri photoUrl = acct.getPhotoUrl();
-            Utility.storeUserProfile(this, email, name, photoUrl.toString());
+            PreferenceUtil.storeUserProfile(this, email, name, photoUrl.toString());
 
             // To be used for phase 2.
             // String idToken = acct.getIdToken();
