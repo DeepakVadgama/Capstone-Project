@@ -46,6 +46,7 @@ public class ContentAdapter extends CursorAdapter {
         public final TextView textView;
         public final LikeButton saveView;
         public final ImageButton shareView;
+        public final ImageView playButtonView;
 
         public ViewHolder(View view) {
             iconView = (ImageView) view.findViewById(R.id.image);
@@ -53,6 +54,7 @@ public class ContentAdapter extends CursorAdapter {
             textView = (TextView) view.findViewById(R.id.text);
             saveView = (LikeButton) view.findViewById(R.id.save);
             shareView = (ImageButton) view.findViewById(R.id.share);
+            playButtonView = (ImageView) view.findViewById(R.id.playImage);
         }
     }
 
@@ -112,12 +114,18 @@ public class ContentAdapter extends CursorAdapter {
             case STORY:
                 h.textView.setVisibility(View.VISIBLE);
                 h.iconView.setVisibility(View.GONE);
+                h.playButtonView.setVisibility(View.GONE);
                 break;
             case PICTURE:
+                h.textView.setVisibility(View.GONE);
+                h.iconView.setVisibility(View.VISIBLE);
+                h.playButtonView.setVisibility(View.GONE);
+                break;
             case KIRTAN:
             case LECTURE:
                 h.textView.setVisibility(View.GONE);
                 h.iconView.setVisibility(View.VISIBLE);
+                h.playButtonView.setVisibility(View.VISIBLE);
                 break;
         }
 
