@@ -35,14 +35,6 @@
             tools:src="@mipmap/krishna"
             android:contentDescription="@string/image"/>
 
-        <com.google.android.youtube.player.YouTubeThumbnailView
-            android:id="@+id/youtube_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@mipmap/no_thumbnail"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"/>
-
         <TextView
             android:id="@+id/text"
             android:layout_width="wrap_content"

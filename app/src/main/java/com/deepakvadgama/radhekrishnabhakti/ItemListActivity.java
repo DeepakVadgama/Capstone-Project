@@ -147,6 +147,5 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mContentAdapter.releaseLoaders();
     }
 }

@@ -18,14 +18,9 @@ import com.bumptech.glide.Glide;
 import com.deepakvadgama.radhekrishnabhakti.pojo.Content;
 import com.deepakvadgama.radhekrishnabhakti.util.PreferenceUtil;
 import com.deepakvadgama.radhekrishnabhakti.util.ShareUtil;
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubeThumbnailLoader;
-import com.google.android.youtube.player.YouTubeThumbnailView;
+import com.deepakvadgama.radhekrishnabhakti.util.YouTubeUtil;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.ContentType;
 import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.ContentType.valueOf;
@@ -42,9 +37,6 @@ public class ContentAdapter extends CursorAdapter {
     private static final int COLUMN_FAVORITE = 6;
     private static final int RECOVERY_REQUEST = 1;
     private boolean mTwoPane = false;
-    private final ThumbnailListener thumbnailListener;
-    private final Map<YouTubeThumbnailView, YouTubeThumbnailLoader> thumbnailViewToLoaderMap;
-
 
     public static class ViewHolder {
 
@@ -54,8 +46,6 @@ public class ContentAdapter extends CursorAdapter {
         public final TextView textView;
         public final LikeButton saveView;
         public final ImageButton shareView;
-        public final YouTubeThumbnailView youtubeView;
-        public boolean youtubeInit;
 
         public ViewHolder(View view) {
             iconView = (ImageView) view.findViewById(R.id.image);
@@ -63,15 +53,11 @@ public class ContentAdapter extends CursorAdapter {
             textView = (TextView) view.findViewById(R.id.text);
             saveView = (LikeButton) view.findViewById(R.id.save);
             shareView = (ImageButton) view.findViewById(R.id.share);
-            youtubeView = (YouTubeThumbnailView) view.findViewById(R.id.youtube_view);
-            youtubeInit = false;
         }
     }
 
     public ContentAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
-        thumbnailListener = new ThumbnailListener();
-        thumbnailViewToLoaderMap = new HashMap<YouTubeThumbnailView, YouTubeThumbnailLoader>();
     }
 
     @Override
@@ -96,45 +82,42 @@ public class ContentAdapter extends CursorAdapter {
             case QUOTE:
                 h.titleView.setText(content.author);
                 h.textView.setText(content.text);
-                h.textView.setVisibility(View.VISIBLE);
-                h.iconView.setVisibility(View.GONE);
-                h.youtubeView.setVisibility(View.GONE);
                 break;
             case STORY:
                 h.titleView.setText(content.title);
                 h.textView.setText(content.text);
-                h.textView.setVisibility(View.VISIBLE);
-                h.iconView.setVisibility(View.GONE);
-                h.youtubeView.setVisibility(View.GONE);
                 break;
             case PICTURE:
                 h.titleView.setText(content.title);
                 Glide.with(context)
                         .load(Uri.parse(content.url))
                         .into(h.iconView);
-                h.textView.setVisibility(View.GONE);
-                h.iconView.setVisibility(View.VISIBLE);
-                h.youtubeView.setVisibility(View.GONE);
                 break;
             case KIRTAN:
                 h.titleView.setText(content.author);
-                h.youtubeView.setTag(content.url);
-                if (!h.youtubeInit) {
-                    h.youtubeView.initialize(DeveloperKey.DEVELOPER_KEY, thumbnailListener);
-                }
-                h.textView.setVisibility(View.GONE);
-                h.iconView.setVisibility(View.GONE);
-                h.youtubeView.setVisibility(View.VISIBLE);
+                Glide.with(context)
+                        .load(YouTubeUtil.getThumbnailUrl(content.url))
+                        .into(h.iconView);
                 break;
             case LECTURE:
                 h.titleView.setText(content.title);
-                h.youtubeView.setTag(content.url);
-                if (!h.youtubeInit) {
-                    h.youtubeView.initialize(DeveloperKey.DEVELOPER_KEY, thumbnailListener);
-                }
-                h.textView.setVisibility(View.GONE);
+                Glide.with(context)
+                        .load(YouTubeUtil.getThumbnailUrl(content.url))
+                        .into(h.iconView);
+                break;
+        }
+
+        switch (type) {
+            case QUOTE:
+            case STORY:
+                h.textView.setVisibility(View.VISIBLE);
                 h.iconView.setVisibility(View.GONE);
-                h.youtubeView.setVisibility(View.VISIBLE);
+                break;
+            case PICTURE:
+            case KIRTAN:
+            case LECTURE:
+                h.textView.setVisibility(View.GONE);
+                h.iconView.setVisibility(View.VISIBLE);
                 break;
         }
 
@@ -230,40 +213,4 @@ public class ContentAdapter extends CursorAdapter {
 ////            }
 //        }
 //    }
-
-    private final class ThumbnailListener implements
-            YouTubeThumbnailView.OnInitializedListener,
-            YouTubeThumbnailLoader.OnThumbnailLoadedListener {
-
-        @Override
-        public void onInitializationSuccess(
-                YouTubeThumbnailView view, YouTubeThumbnailLoader loader) {
-            loader.setOnThumbnailLoadedListener(this);
-            thumbnailViewToLoaderMap.put(view, loader);
-            String videoUrl = (String) view.getTag();
-            final String videoKey = videoUrl.split("v=")[1];
-            loader.setVideo(videoKey);
-        }
-
-        @Override
-        public void onInitializationFailure(
-                YouTubeThumbnailView view, YouTubeInitializationResult loader) {
-            view.setImageResource(R.mipmap.no_thumbnail);
-        }
-
-        @Override
-        public void onThumbnailLoaded(YouTubeThumbnailView view, String videoId) {
-        }
-
-        @Override
-        public void onThumbnailError(YouTubeThumbnailView view, YouTubeThumbnailLoader.ErrorReason errorReason) {
-            view.setImageResource(R.mipmap.no_thumbnail);
-        }
-    }
-
-    public void releaseLoaders() {
-        for (YouTubeThumbnailLoader loader : thumbnailViewToLoaderMap.values()) {
-            loader.release();
-        }
-    }
 }
