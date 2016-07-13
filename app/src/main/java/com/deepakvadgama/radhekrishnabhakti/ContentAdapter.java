@@ -18,8 +18,14 @@ import com.bumptech.glide.Glide;
 import com.deepakvadgama.radhekrishnabhakti.pojo.Content;
 import com.deepakvadgama.radhekrishnabhakti.util.PreferenceUtil;
 import com.deepakvadgama.radhekrishnabhakti.util.ShareUtil;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubeThumbnailLoader;
+import com.google.android.youtube.player.YouTubeThumbnailView;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.ContentType;
 import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.ContentType.valueOf;
@@ -34,8 +40,11 @@ public class ContentAdapter extends CursorAdapter {
     private static final int COLUMN_URL = 4;
     private static final int COLUMN_TEXT = 5;
     private static final int COLUMN_FAVORITE = 6;
-
+    private static final int RECOVERY_REQUEST = 1;
     private boolean mTwoPane = false;
+    private final ThumbnailListener thumbnailListener;
+    private final Map<YouTubeThumbnailView, YouTubeThumbnailLoader> thumbnailViewToLoaderMap;
+
 
     public static class ViewHolder {
 
@@ -45,6 +54,8 @@ public class ContentAdapter extends CursorAdapter {
         public final TextView textView;
         public final LikeButton saveView;
         public final ImageButton shareView;
+        public final YouTubeThumbnailView youtubeView;
+        public boolean youtubeInit;
 
         public ViewHolder(View view) {
             iconView = (ImageView) view.findViewById(R.id.image);
@@ -52,11 +63,15 @@ public class ContentAdapter extends CursorAdapter {
             textView = (TextView) view.findViewById(R.id.text);
             saveView = (LikeButton) view.findViewById(R.id.save);
             shareView = (ImageButton) view.findViewById(R.id.share);
+            youtubeView = (YouTubeThumbnailView) view.findViewById(R.id.youtube_view);
+            youtubeInit = false;
         }
     }
 
     public ContentAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
+        thumbnailListener = new ThumbnailListener();
+        thumbnailViewToLoaderMap = new HashMap<YouTubeThumbnailView, YouTubeThumbnailLoader>();
     }
 
     @Override
@@ -83,12 +98,14 @@ public class ContentAdapter extends CursorAdapter {
                 h.textView.setText(content.text);
                 h.textView.setVisibility(View.VISIBLE);
                 h.iconView.setVisibility(View.GONE);
+                h.youtubeView.setVisibility(View.GONE);
                 break;
             case STORY:
                 h.titleView.setText(content.title);
                 h.textView.setText(content.text);
                 h.textView.setVisibility(View.VISIBLE);
                 h.iconView.setVisibility(View.GONE);
+                h.youtubeView.setVisibility(View.GONE);
                 break;
             case PICTURE:
                 h.titleView.setText(content.title);
@@ -97,26 +114,37 @@ public class ContentAdapter extends CursorAdapter {
                         .into(h.iconView);
                 h.textView.setVisibility(View.GONE);
                 h.iconView.setVisibility(View.VISIBLE);
+                h.youtubeView.setVisibility(View.GONE);
                 break;
             case KIRTAN:
                 h.titleView.setText(content.author);
+                h.youtubeView.setTag(content.url);
+                if (!h.youtubeInit) {
+                    h.youtubeView.initialize(DeveloperKey.DEVELOPER_KEY, thumbnailListener);
+                }
                 h.textView.setVisibility(View.GONE);
-                h.iconView.setVisibility(View.VISIBLE);
+                h.iconView.setVisibility(View.GONE);
+                h.youtubeView.setVisibility(View.VISIBLE);
                 break;
             case LECTURE:
                 h.titleView.setText(content.title);
+                h.youtubeView.setTag(content.url);
+                if (!h.youtubeInit) {
+                    h.youtubeView.initialize(DeveloperKey.DEVELOPER_KEY, thumbnailListener);
+                }
                 h.textView.setVisibility(View.GONE);
-                h.iconView.setVisibility(View.VISIBLE);
+                h.iconView.setVisibility(View.GONE);
+                h.youtubeView.setVisibility(View.VISIBLE);
                 break;
         }
 
         // Set click listener on save
-        h.saveView.setTag(COLUMN_ID, content.id);
+        h.saveView.setTag(content.id);
         h.saveView.setLiked(content.isFavorite);
         h.saveView.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
-                int id = (Integer) likeButton.getTag(COLUMN_ID);
+                int id = (Integer) likeButton.getTag();
 
                 // Update in preferences
                 PreferenceUtil.addToFavorites(context, id);
@@ -130,7 +158,7 @@ public class ContentAdapter extends CursorAdapter {
 
             @Override
             public void unLiked(LikeButton likeButton) {
-                int id = (Integer) likeButton.getTag(COLUMN_ID);
+                int id = (Integer) likeButton.getTag();
 
                 // Update in preferences
                 PreferenceUtil.removeFromFavorites(context, id);
@@ -174,5 +202,68 @@ public class ContentAdapter extends CursorAdapter {
 
     public void setTwoPane(boolean mTwoPane) {
         this.mTwoPane = mTwoPane;
+    }
+
+//    private class MyYouTubePlayerInitializer implements YouTubePlayer.OnInitializedListener {
+//
+//        private String videoUrl;
+//
+//        public MyYouTubePlayerInitializer(String videoUrl) {
+//            this.videoUrl = videoUrl;
+//        }
+//
+//        @Override
+//        public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {
+//            if (!wasRestored) {
+//                player.cueVideo(videoUrl);
+//            }
+//        }
+//
+//        @Override
+//        public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult errorReason) {
+//            // TODO: Take care of this.
+////            if (errorReason.isUserRecoverableError()) {
+////                errorReason.getErrorDialog(this, RECOVERY_REQUEST).show();
+////            } else {
+////                String error = String.format(getString(R.string.player_error), errorReason.toString());
+////                Toast.makeText(, error, Toast.LENGTH_LONG).show();
+////            }
+//        }
+//    }
+
+    private final class ThumbnailListener implements
+            YouTubeThumbnailView.OnInitializedListener,
+            YouTubeThumbnailLoader.OnThumbnailLoadedListener {
+
+        @Override
+        public void onInitializationSuccess(
+                YouTubeThumbnailView view, YouTubeThumbnailLoader loader) {
+            loader.setOnThumbnailLoadedListener(this);
+            thumbnailViewToLoaderMap.put(view, loader);
+            String videoUrl = (String) view.getTag();
+            final String videoKey = videoUrl.split("v=")[1];
+            loader.setVideo(videoKey);
+        }
+
+        @Override
+        public void onInitializationFailure(
+                YouTubeThumbnailView view, YouTubeInitializationResult loader) {
+            view.setImageResource(R.mipmap.no_thumbnail);
+        }
+
+        @Override
+        public void onThumbnailLoaded(YouTubeThumbnailView view, String videoId) {
+        }
+
+        @Override
+        public void onThumbnailError(YouTubeThumbnailView view, YouTubeThumbnailLoader.ErrorReason errorReason) {
+            view.setImageResource(R.mipmap.no_thumbnail);
+        }
+    }
+
+    public void releaseLoaders() {
+        for (YouTubeThumbnailLoader loader : thumbnailViewToLoaderMap.values()) {
+            loader.release();
+        }
     }
 }

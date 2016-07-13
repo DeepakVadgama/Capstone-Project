@@ -143,4 +143,10 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
         // TODO: Failed to connect to Google.
         Log.e(LOG_TAG, "Failed to connect to Google");
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mContentAdapter.releaseLoaders();
+    }
 }

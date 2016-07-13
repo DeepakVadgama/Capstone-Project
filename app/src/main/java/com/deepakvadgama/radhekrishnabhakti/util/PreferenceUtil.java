@@ -63,7 +63,8 @@ public class PreferenceUtil {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         final Set<String> stringSet = prefs.getStringSet(context.getString(R.string.pref_favorites_added), new HashSet<String>());
-        stringSet.remove(String.valueOf(id));
+        stringSet.remove(
+                String.valueOf(id));
         editor.putStringSet(context.getString(R.string.pref_favorites_added), stringSet);
     }
 }

@@ -18,5 +18,7 @@
     <string name="pref_favorites_updated" translatable="false">pref_favorites_updated</string>
     <string name="pref_favorites_added" translatable="false">pref_favorites_added</string>
     <string name="pref_favorites_removed" translatable="false">pref_favorites_removed</string>
+    <string name="image">Image</string>
+    <string name="share_button">Share button</string>
 
 </resources>

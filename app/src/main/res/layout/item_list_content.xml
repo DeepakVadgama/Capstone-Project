@@ -32,7 +32,16 @@
             android:layout_height="250dp"
             android:scaleType="centerCrop"
             android:visibility="visible"
-            tools:src="@mipmap/krishna"/>
+            tools:src="@mipmap/krishna"
+            android:contentDescription="@string/image"/>
+
+        <com.google.android.youtube.player.YouTubeThumbnailView
+            android:id="@+id/youtube_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@mipmap/no_thumbnail"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"/>
 
         <TextView
             android:id="@+id/text"
@@ -70,7 +79,7 @@
                 android:src="@drawable/ic_share_black_24dp"
                 android:drawablePadding="8dp"
                 android:textSize="24sp"
-                android:contentDescription="Share button"/>
+                android:contentDescription="@string/share_button"/>
 
         </LinearLayout>
 
