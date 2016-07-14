@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
@@ -34,13 +37,15 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
 
     public final String LOG_TAG = ItemListActivity.class.getSimpleName();
 
+    private static final String SELECTED_KEY = "selected_position";
     private static final int CONTENT_LOADER = 0;
     private static final int REQUEST_CODE = 10;
     private boolean mTwoPane;
     private ContentAdapter mContentAdapter;
     private LoaderManager.LoaderCallbacks<Cursor> mCallbacks;
     private GoogleApiClient mGoogleApiClient;
-
+    private int mPosition = ListView.INVALID_POSITION;
+    private ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +56,7 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        // TODO: Replace later with Recycler View (though its complicated due lack of native support).
+        // TODO: Replace later with Recycler View (complicated due lack of native support w/ CursorAdapter).
         // Initialize the adapter. Note that we pass a 'null' Cursor as the third argument. We will pass the adapter a Cursor only when the
         // data has finished loading for the first time (i.e. when the LoaderManager delivers the data to onLoadFinished). Also note
         // that we have passed the '0' flag as the last argument. This prevents the adapter from registering a ContentObserver for the
@@ -62,10 +67,43 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
         if (findViewById(R.id.item_detail_container) != null) {
             mTwoPane = true;
             mContentAdapter.setTwoPane(true);
+            // At this point there is no data, so load fragment after cursor load finishes.
+
         }
 
-        ListView listView = (ListView) findViewById(R.id.item_list);
-        listView.setAdapter(mContentAdapter);
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
+            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+        }
+
+        mListView = (ListView) findViewById(R.id.item_list);
+        mListView.setAdapter(mContentAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+
+                final Bundle args = new Bundle();
+                args.putParcelable(ItemDetailFragment.ARG_ITEM_ID, (Parcelable) view.getTag());
+//                args.putInt(ItemDetailFragment.ARG_ITEM_ID, cursor.getInt(0));
+
+                final ItemDetailFragment fragment = new ItemDetailFragment();
+                fragment.setArguments(args);
+
+                if (mTwoPane) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.item_detail_container, fragment)
+                            .commit();
+                } else {
+                    Intent intent = new Intent(view.getContext(), ItemDetailActivity.class);
+                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, (Parcelable) view.getTag());
+                    //    intent.putStringExtra(ItemDetailFragment.ARG_ITEM_ID, cursor.getInt(0));
+                    startActivity(intent);
+                }
+
+                mPosition = position;
+            }
+        });
 
         // Main Sauce - Here loader is created if not present, or already created loader is reused.
         getSupportLoaderManager().initLoader(CONTENT_LOADER, null, this);
@@ -116,6 +154,20 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if (mPosition != ListView.INVALID_POSITION) {
+            outState.putInt(SELECTED_KEY, mPosition);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         // Since activity uses only 1 loader, we are not using id/LOADER_ID
@@ -129,8 +181,28 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mContentAdapter.swapCursor(data);
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        mContentAdapter.swapCursor(cursor);
+        if (mPosition != ListView.INVALID_POSITION) {
+            mListView.smoothScrollToPosition(mPosition);
+        }
+
+        // Tablet, on data load, open details view
+        if (mTwoPane) {
+            if (mPosition != ListView.INVALID_POSITION) {
+                cursor.moveToPosition(mPosition);
+            }
+
+            final Bundle args = new Bundle();
+            args.putInt(ItemDetailFragment.ARG_ITEM_ID, cursor.getInt(0));
+
+            final ItemDetailFragment fragment = new ItemDetailFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.item_detail_container, fragment)
+                    .commit();
+        }
     }
 
     @Override

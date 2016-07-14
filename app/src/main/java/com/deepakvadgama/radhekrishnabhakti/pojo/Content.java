@@ -1,6 +1,9 @@
 package com.deepakvadgama.radhekrishnabhakti.pojo;
 
-public class Content {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Content implements Parcelable {
 
     public int id;
     public String type;
@@ -23,6 +26,28 @@ public class Content {
         this.text = text;
     }
 
+    protected Content(Parcel in) {
+        id = in.readInt();
+        type = in.readString();
+        title = in.readString();
+        author = in.readString();
+        url = in.readString();
+        text = in.readString();
+        isFavorite = in.readByte() != 0;
+    }
+
+    public static final Creator<Content> CREATOR = new Creator<Content>() {
+        @Override
+        public Content createFromParcel(Parcel in) {
+            return new Content(in);
+        }
+
+        @Override
+        public Content[] newArray(int size) {
+            return new Content[size];
+        }
+    };
+
     @Override
     public String toString() {
         return "Content{" +
@@ -36,4 +61,19 @@ public class Content {
                 '}';
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(type);
+        dest.writeString(title);
+        dest.writeString(author);
+        dest.writeString(url);
+        dest.writeString(text);
+        dest.writeByte((byte) (isFavorite ? 1 : 0));
+    }
 }
