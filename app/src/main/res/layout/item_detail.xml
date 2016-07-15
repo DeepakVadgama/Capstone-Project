@@ -26,11 +26,9 @@
 
         <fragment
             android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
-            android:id="@+id/youtube_view"
+            android:id="@+id/youtube_fragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="200dp"
-            />
+            android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/quote"

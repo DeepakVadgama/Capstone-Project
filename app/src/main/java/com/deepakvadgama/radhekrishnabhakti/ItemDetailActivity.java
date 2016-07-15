@@ -54,7 +54,6 @@ public class ItemDetailActivity extends AppCompatActivity {
             Bundle args = new Bundle();
             args.putParcelable(ItemDetailFragment.ARG_ITEM,
                     getIntent().getParcelableExtra(ItemDetailFragment.ARG_ITEM));
-            // getIntent().getStringExtra
 
             ItemDetailFragment fragment = new ItemDetailFragment();
             fragment.setArguments(args);

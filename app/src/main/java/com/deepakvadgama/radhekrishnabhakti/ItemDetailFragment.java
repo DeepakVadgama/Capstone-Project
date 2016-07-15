@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +27,7 @@ import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.Content
  * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
  * on handsets.
  */
-public class ItemDetailFragment extends Fragment {
+public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInitializedListener {
 
     public static final String ARG_ITEM = "item";
 
@@ -67,7 +66,7 @@ public class ItemDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         ImageView imageView = ((ImageView) rootView.findViewById(R.id.image));
-        View youTubeView = rootView.findViewById(R.id.youtube_view);
+        View youTubeView = rootView.findViewById(R.id.youtube_fragment);
         TextView titleView = (TextView) rootView.findViewById(R.id.title);
         TextView quoteView = (TextView) rootView.findViewById(R.id.quote);
         TextView authorView = (TextView) rootView.findViewById(R.id.author);
@@ -93,26 +92,10 @@ public class ItemDetailFragment extends Fragment {
             case LECTURE:
                 titleView.setText(mItem.author);
 
-                YouTubePlayerSupportFragment youTubePlayerFragment = YouTubePlayerSupportFragment.newInstance();
-                FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-                transaction.add(R.id.youtube_view, youTubePlayerFragment).commit();
+                YouTubePlayerSupportFragment youTubePlayerFragment
+                        = (YouTubePlayerSupportFragment) getChildFragmentManager().findFragmentById(R.id.youtube_fragment);
+                youTubePlayerFragment.initialize(YouTubeUtil.DEVELOPER_KEY, this);
 
-                youTubePlayerFragment.initialize(YouTubeUtil.DEVELOPER_KEY, new YouTubePlayer.OnInitializedListener() {
-
-                    @Override
-                    public void onInitializationSuccess(YouTubePlayer.Provider arg0, YouTubePlayer youTubePlayer, boolean wasRestored) {
-                        if (!wasRestored) {
-//                            youTubePlayer.setFullscreen(true);
-                            youTubePlayer.loadVideo(YouTubeUtil.getVideoKey(mItem.url));
-                            youTubePlayer.play();
-                        }
-                    }
-
-                    @Override
-                    public void onInitializationFailure(YouTubePlayer.Provider arg0, YouTubeInitializationResult arg1) {
-
-                    }
-                });
                 break;
         }
 
@@ -140,8 +123,8 @@ public class ItemDetailFragment extends Fragment {
                 break;
             case KIRTAN:
             case LECTURE:
-//                titleView.setVisibility(View.VISIBLE);
-//                authorView.setVisibility(View.VISIBLE);
+                titleView.setVisibility(View.VISIBLE);
+                authorView.setVisibility(View.VISIBLE);
                 youTubeView.setVisibility(View.VISIBLE);
                 break;
         }
@@ -153,5 +136,19 @@ public class ItemDetailFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(ARG_ITEM, mItem);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
+        if (!wasRestored) {
+//                            youTubePlayer.setFullscreen(true);
+            youTubePlayer.loadVideo(YouTubeUtil.getVideoKey(mItem.url));
+            youTubePlayer.play();
+        }
+    }
+
+    @Override
+    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+        System.out.println("Error");
     }
 }

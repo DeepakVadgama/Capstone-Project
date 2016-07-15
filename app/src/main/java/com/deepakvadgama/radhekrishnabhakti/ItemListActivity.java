@@ -92,6 +92,8 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.item_detail_container, fragment)
                             .commit();
+
+                    // YouTube
                 } else {
                     Intent intent = new Intent(view.getContext(), ItemDetailActivity.class);
                     intent.putExtra(ItemDetailFragment.ARG_ITEM, (Parcelable) view.getTag(R.id.contentTag));
