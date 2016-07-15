@@ -36,12 +36,12 @@ public class ContentAdapter extends CursorAdapter {
     private static final int COLUMN_TEXT = 5;
     private static final int COLUMN_FAVORITE = 6;
     private static final int RECOVERY_REQUEST = 1;
+    private static final int CONTENT_TAG = 1;
     private boolean mTwoPane = false;
 
     public static class ViewHolder {
 
         public final ImageView iconView;
-
         public final TextView titleView;
         public final TextView textView;
         public final LikeButton saveView;
@@ -77,6 +77,8 @@ public class ContentAdapter extends CursorAdapter {
     public void bindView(View view, final Context context, Cursor cursor) {
 
         final Content content = converToContent(cursor);
+        view.setTag(R.id.contentTag, content);
+
         ViewHolder h = (ViewHolder) view.getTag();
 
         final ContentType type = valueOf(content.type);
@@ -109,21 +111,22 @@ public class ContentAdapter extends CursorAdapter {
                 break;
         }
 
+        // Set all views invisible
+        h.textView.setVisibility(View.GONE);
+        h.iconView.setVisibility(View.GONE);
+        h.playButtonView.setVisibility(View.GONE);
+
+        // Set visibility based on type
         switch (type) {
             case QUOTE:
             case STORY:
                 h.textView.setVisibility(View.VISIBLE);
-                h.iconView.setVisibility(View.GONE);
-                h.playButtonView.setVisibility(View.GONE);
                 break;
             case PICTURE:
-                h.textView.setVisibility(View.GONE);
                 h.iconView.setVisibility(View.VISIBLE);
-                h.playButtonView.setVisibility(View.GONE);
                 break;
             case KIRTAN:
             case LECTURE:
-                h.textView.setVisibility(View.GONE);
                 h.iconView.setVisibility(View.VISIBLE);
                 h.playButtonView.setVisibility(View.VISIBLE);
                 break;

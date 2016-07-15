@@ -52,8 +52,8 @@ public class ItemDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity using a fragment transaction.
             Bundle args = new Bundle();
-            args.putParcelable(ItemDetailFragment.ARG_ITEM_ID,
-                    getIntent().getParcelableExtra(ItemDetailFragment.ARG_ITEM_ID));
+            args.putParcelable(ItemDetailFragment.ARG_ITEM,
+                    getIntent().getParcelableExtra(ItemDetailFragment.ARG_ITEM));
             // getIntent().getStringExtra
 
             ItemDetailFragment fragment = new ItemDetailFragment();

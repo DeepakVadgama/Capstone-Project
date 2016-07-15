@@ -14,7 +14,34 @@
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="200sp"/>
+            android:minHeight="200sp"
+            android:visibility="visible"
+            tools:src="@mipmap/youtube_play"/>
+
+        <!--<com.google.android.youtube.player.YouTubePlayerView-->
+        <!--android:id="@+id/youtube_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:visibility="gone"/>-->
+
+        <fragment
+            android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
+            android:id="@+id/youtube_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="200dp"
+            />
+
+        <TextView
+            android:id="@+id/quote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="200sp"
+            android:padding="16dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:textSize="32sp"
+            android:visibility="gone"
+            tools:text="Work, apart from devotion or love of God, is helpless and cannot stand alone"/>
 
         <TextView
             android:id="@+id/title"
@@ -22,18 +49,24 @@
             android:layout_height="wrap_content"
             android:minHeight="50dp"
             android:padding="16dp"
-            android:textSize="16sp"/>
+            android:textSize="21sp"
+            android:visibility="visible"
+            tools:text="Radhe Krishna"/>
 
         <TextView
             android:id="@+id/author"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="50dp"
-            android:padding="16dp"
-            android:textSize="16sp"/>
+            android:paddingTop="8dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textSize="16sp"
+            tools:text="Swami Vivekanand"
+            android:visibility="gone"/>
 
         <TextView
-            android:id="@+id/text"
+            android:id="@+id/story"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="50dp"

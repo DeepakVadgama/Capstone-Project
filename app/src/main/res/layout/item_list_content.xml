@@ -6,6 +6,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
+                                    android:descendantFocusability="blocksDescendants"
                                     card_view:cardCornerRadius="10dp"
                                     card_view:cardElevation="5dp"
                                     card_view:cardUseCompatPadding="true">

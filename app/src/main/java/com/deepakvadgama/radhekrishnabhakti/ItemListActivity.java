@@ -81,23 +81,20 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
-
-                final Bundle args = new Bundle();
-                args.putParcelable(ItemDetailFragment.ARG_ITEM_ID, (Parcelable) view.getTag());
-//                args.putInt(ItemDetailFragment.ARG_ITEM_ID, cursor.getInt(0));
-
-                final ItemDetailFragment fragment = new ItemDetailFragment();
-                fragment.setArguments(args);
 
                 if (mTwoPane) {
+                    final Bundle args = new Bundle();
+                    args.putParcelable(ItemDetailFragment.ARG_ITEM, (Parcelable) view.getTag(R.id.contentTag));
+
+                    final ItemDetailFragment fragment = new ItemDetailFragment();
+                    fragment.setArguments(args);
+
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.item_detail_container, fragment)
                             .commit();
                 } else {
                     Intent intent = new Intent(view.getContext(), ItemDetailActivity.class);
-                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, (Parcelable) view.getTag());
-                    //    intent.putStringExtra(ItemDetailFragment.ARG_ITEM_ID, cursor.getInt(0));
+                    intent.putExtra(ItemDetailFragment.ARG_ITEM, (Parcelable) view.getTag(R.id.contentTag));
                     startActivity(intent);
                 }
 
@@ -194,7 +191,7 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
             }
 
             final Bundle args = new Bundle();
-            args.putInt(ItemDetailFragment.ARG_ITEM_ID, cursor.getInt(0));
+            args.putInt(ItemDetailFragment.ARG_ITEM, cursor.getInt(0));
 
             final ItemDetailFragment fragment = new ItemDetailFragment();
             fragment.setArguments(args);
