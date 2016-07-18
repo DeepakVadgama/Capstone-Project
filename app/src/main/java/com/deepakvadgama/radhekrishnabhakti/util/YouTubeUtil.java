@@ -19,6 +19,10 @@ public class YouTubeUtil {
         return imageUri;
     }
 
+    public static String getThumbnailUrlString(String videoUrl) {
+        return getThumbnailUrl(videoUrl).toString();
+    }
+
     public static String getVideoKey(String videoUrl) {
         String videoKey = videoUrl.split("v=")[1];
         return videoKey;

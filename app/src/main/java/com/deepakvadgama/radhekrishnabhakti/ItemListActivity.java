@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
+import com.deepakvadgama.radhekrishnabhakti.pojo.Content;
 import com.deepakvadgama.radhekrishnabhakti.sync.ContentSyncAdapter;
 import com.deepakvadgama.radhekrishnabhakti.util.PreferenceUtil;
 import com.google.android.gms.auth.api.Auth;
@@ -40,6 +41,7 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
     private static final String SELECTED_KEY = "selected_position";
     private static final int CONTENT_LOADER = 0;
     private static final int REQUEST_CODE = 10;
+    public static final String ARG_ITEM = "CONTENT_ITEM";
     private boolean mTwoPane;
     private ContentAdapter mContentAdapter;
     private LoaderManager.LoaderCallbacks<Cursor> mCallbacks;
@@ -68,7 +70,6 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
             mTwoPane = true;
             mContentAdapter.setTwoPane(true);
             // At this point there is no data, so load fragment after cursor load finishes.
-
         }
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
@@ -93,7 +94,6 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
                             .replace(R.id.item_detail_container, fragment)
                             .commit();
 
-                    // YouTube
                 } else {
                     Intent intent = new Intent(view.getContext(), ItemDetailActivity.class);
                     intent.putExtra(ItemDetailFragment.ARG_ITEM, (Parcelable) view.getTag(R.id.contentTag));
@@ -135,7 +135,7 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
             handleSignInResult(result);
         } else if (requestCode == REQUEST_CODE && resultCode == RESULT_CANCELED) {
             // TODO: If account is not chosen.
-//            Toast.makeText(this, R.string.pick_account, Toast.LENGTH_LONG).show();
+//            Snackbar.make(this, R.string.pick_account, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -170,7 +170,6 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         // Since activity uses only 1 loader, we are not using id/LOADER_ID
-        // TODO: Check projection and sort order
         return new CursorLoader(this,
                 DatabaseContract.ContentEntry.CONTENT_URI,
                 DatabaseContract.CONTENT_COLUMNS,
@@ -186,14 +185,41 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
             mListView.smoothScrollToPosition(mPosition);
         }
 
+        // If Activity triggered from Notification or Widget
+        if (getIntent().getParcelableExtra(ARG_ITEM) != null) {
+
+            Content content = getIntent().getParcelableExtra(ARG_ITEM);
+            if (mTwoPane) {
+
+                final Bundle args = new Bundle();
+                args.putParcelable(ItemDetailFragment.ARG_ITEM, content);
+
+                final ItemDetailFragment fragment = new ItemDetailFragment();
+                fragment.setArguments(args);
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.item_detail_container, fragment)
+                        .commit();
+
+            } else {
+                Intent intent = new Intent(this, ItemDetailActivity.class);
+                intent.putExtra(ItemDetailFragment.ARG_ITEM, content);
+                startActivity(intent);
+            }
+
+            return;
+        }
+
         // Tablet, on data load, open details view
         if (mTwoPane) {
             if (mPosition != ListView.INVALID_POSITION) {
                 cursor.moveToPosition(mPosition);
+            } else {
+                cursor.moveToFirst();
             }
 
             final Bundle args = new Bundle();
-            args.putInt(ItemDetailFragment.ARG_ITEM, cursor.getInt(0));
+            args.putParcelable(ItemDetailFragment.ARG_ITEM, ContentAdapter.converToContent(cursor));
 
             final ItemDetailFragment fragment = new ItemDetailFragment();
             fragment.setArguments(args);

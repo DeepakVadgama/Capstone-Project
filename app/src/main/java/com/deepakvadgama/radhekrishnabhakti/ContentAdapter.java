@@ -178,7 +178,7 @@ public class ContentAdapter extends CursorAdapter {
 
 
     @NonNull
-    private Content converToContent(Cursor cursor) {
+    public static Content converToContent(Cursor cursor) {
         Content content = new Content();
         content.id = cursor.getInt(COLUMN_ID);
         content.title = cursor.getString(COLUMN_TITLE);
@@ -197,31 +197,4 @@ public class ContentAdapter extends CursorAdapter {
     public void setTwoPane(boolean mTwoPane) {
         this.mTwoPane = mTwoPane;
     }
-
-//    private class MyYouTubePlayerInitializer implements YouTubePlayer.OnInitializedListener {
-//
-//        private String videoUrl;
-//
-//        public MyYouTubePlayerInitializer(String videoUrl) {
-//            this.videoUrl = videoUrl;
-//        }
-//
-//        @Override
-//        public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {
-//            if (!wasRestored) {
-//                player.cueVideo(videoUrl);
-//            }
-//        }
-//
-//        @Override
-//        public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult errorReason) {
-//            // TODO: Take care of this.
-////            if (errorReason.isUserRecoverableError()) {
-////                errorReason.getErrorDialog(this, RECOVERY_REQUEST).show();
-////            } else {
-////                String error = String.format(getString(R.string.player_error), errorReason.toString());
-////                Toast.makeText(, error, Toast.LENGTH_LONG).show();
-////            }
-//        }
-//    }
 }

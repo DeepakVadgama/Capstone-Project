@@ -5,7 +5,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,6 +20,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
 import com.deepakvadgama.radhekrishnabhakti.pojo.Content;
+import com.deepakvadgama.radhekrishnabhakti.util.ShareUtil;
 import com.deepakvadgama.radhekrishnabhakti.util.YouTubeUtil;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -29,11 +36,13 @@ import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.Content
  */
 public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInitializedListener {
 
+    public static final String TAG = "ItemDetailFragment";
     public static final String ARG_ITEM = "item";
 
     // Accept Content directly instead of URI, then loading data from Cursor
     // Cursor is not needed here since data is not expected to change (unlike Sunshine app)
     private Content mItem;
+    private ShareActionProvider mShareActionProvider;
 
     // Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
     public ItemDetailFragment() {
@@ -149,6 +158,23 @@ public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInit
 
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-        System.out.println("Error");
+        Log.w(TAG, "Error initializing YouTube");
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        inflater.inflate(R.menu.detail_fragment, menu);
+
+        // Retrieve the share menu item
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+
+        // Get the provider and hold onto it to set/change the share intent.
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+
+        // Later: If using cursor, if onLoadFinished happens before this, we can go ahead and set the share intent now.
+        if (mItem != null) {
+            mShareActionProvider.setShareIntent(ShareUtil.getShareIntent(mItem));
+        }
     }
 }
