@@ -8,6 +8,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
@@ -80,6 +81,7 @@ public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInit
 
                     content.isFavorite = true;
                     snackBarText = content.getTypeInTitleCase() + " added to favorites";
+                    ((FloatingActionButton) view).setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_favorite_white_24dp));
 
                 } else {
                     // Update in preferences
@@ -92,6 +94,7 @@ public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInit
 
                     content.isFavorite = true;
                     snackBarText = content.getTypeInTitleCase() + " removed from favorites";
+                    ((FloatingActionButton) view).setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_favorite_border_white_24dp));
                 }
 
                 Snackbar.make(view, snackBarText, Snackbar.LENGTH_LONG).show();
