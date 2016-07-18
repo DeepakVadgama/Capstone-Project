@@ -35,11 +35,6 @@ public class ShareUtil {
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_TEXT, content.title + " \n\n " + content.text);
                 break;
-//            case PICTURE:
-//                final Uri pictureStream = getFilePictureStream(context, content.url);
-//                shareIntent.setType("image/*");
-//                shareIntent.putExtra(Intent.EXTRA_STREAM, pictureStream);
-//                break;
             case KIRTAN:
             case LECTURE:
                 shareIntent.setType("text/plain");
