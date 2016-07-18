@@ -2,6 +2,7 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             tools:context="com.deepakvadgama.radhekrishnabhakti.ItemDetailFragment">
 
     <LinearLayout
@@ -72,5 +73,15 @@
             android:textSize="16sp"/>
 
     </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_favorite_border_white_24dp"
+        app:layout_anchor="@+id/item_detail_container"
+        app:layout_anchorGravity="bottom|end"/>
 
 </ScrollView>

@@ -185,7 +185,7 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
             mListView.smoothScrollToPosition(mPosition);
         }
 
-        // If Activity triggered from Notification or Widget
+        // If Activity is triggered from Notification or Widget, display appropriate content
         if (getIntent().getParcelableExtra(ARG_ITEM) != null) {
 
             Content content = getIntent().getParcelableExtra(ARG_ITEM);
@@ -212,6 +212,7 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
 
         // Tablet, on data load, open details view
         if (mTwoPane) {
+
             if (mPosition != ListView.INVALID_POSITION) {
                 cursor.moveToPosition(mPosition);
             } else {

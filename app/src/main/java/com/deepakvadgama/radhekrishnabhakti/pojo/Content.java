@@ -76,4 +76,8 @@ public class Content implements Parcelable {
         dest.writeString(text);
         dest.writeByte((byte) (isFavorite ? 1 : 0));
     }
+
+    public String getTypeInTitleCase() {
+        return type.substring(0, 1).toUpperCase() + type.substring(1, type.length()).toLowerCase();
+    }
 }

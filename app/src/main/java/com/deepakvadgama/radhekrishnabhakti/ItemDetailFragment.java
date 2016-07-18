@@ -1,9 +1,12 @@
 package com.deepakvadgama.radhekrishnabhakti;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
 import com.deepakvadgama.radhekrishnabhakti.pojo.Content;
+import com.deepakvadgama.radhekrishnabhakti.util.PreferenceUtil;
 import com.deepakvadgama.radhekrishnabhakti.util.ShareUtil;
 import com.deepakvadgama.radhekrishnabhakti.util.YouTubeUtil;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -41,8 +45,7 @@ public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInit
 
     // Accept Content directly instead of URI, then loading data from Cursor
     // Cursor is not needed here since data is not expected to change (unlike Sunshine app)
-    private Content mItem;
-    private ShareActionProvider mShareActionProvider;
+    private Content content;
 
     // Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
     public ItemDetailFragment() {
@@ -53,17 +56,52 @@ public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInit
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ITEM)) {
-            mItem = getArguments().getParcelable(ARG_ITEM);
+            content = getArguments().getParcelable(ARG_ITEM);
         }
 
         if (savedInstanceState != null && savedInstanceState.containsKey(ARG_ITEM)) {
-            mItem = savedInstanceState.getParcelable(ARG_ITEM);
+            content = savedInstanceState.getParcelable(ARG_ITEM);
         }
+
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String snackBarText = null;
+                if (!content.isFavorite) {
+                    // Update in preferences
+                    PreferenceUtil.addToFavorites(getActivity(), content.id);
+
+                    // Update favorites table
+                    ContentValues values = new ContentValues();
+                    values.put(DatabaseContract.FavoritesEntry.COLUMN_CONTENT_ID, content.id);
+                    getActivity().getContentResolver().insert(DatabaseContract.FavoritesEntry.CONTENT_URI, values);
+
+                    content.isFavorite = true;
+                    snackBarText = content.getTypeInTitleCase() + " added to favorites";
+
+                } else {
+                    // Update in preferences
+                    PreferenceUtil.removeFromFavorites(getActivity(), content.id);
+
+                    // Update favorites table
+                    getActivity().getContentResolver().delete(DatabaseContract.FavoritesEntry.CONTENT_URI,
+                            DatabaseContract.FavoritesEntry.COLUMN_CONTENT_ID + " = ? ",
+                            new String[]{String.valueOf(content.id)});
+
+                    content.isFavorite = true;
+                    snackBarText = content.getTypeInTitleCase() + " removed from favorites";
+                }
+
+                Snackbar.make(view, snackBarText, Snackbar.LENGTH_LONG).show();
+            }
+        });
 
         Activity activity = this.getActivity();
         CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
         if (appBarLayout != null) {
-            appBarLayout.setTitle(mItem.type);
+            appBarLayout.setTitle(content.type);
         }
     }
 
@@ -81,25 +119,25 @@ public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInit
         TextView authorView = (TextView) rootView.findViewById(R.id.author);
         TextView textView = (TextView) rootView.findViewById(R.id.story);
 
-        final DatabaseContract.ContentType type = valueOf(mItem.type);
+        final DatabaseContract.ContentType type = valueOf(content.type);
         switch (type) {
             case QUOTE:
-                titleView.setText(mItem.author);
-                quoteView.setText(mItem.text);
+                titleView.setText(content.author);
+                quoteView.setText(content.text);
                 break;
             case STORY:
-                titleView.setText(mItem.title);
-                textView.setText(mItem.text);
+                titleView.setText(content.title);
+                textView.setText(content.text);
                 break;
             case PICTURE:
-                titleView.setText(mItem.title);
+                titleView.setText(content.title);
                 Glide.with(getActivity())
-                        .load(Uri.parse(mItem.url))
+                        .load(Uri.parse(content.url))
                         .into(imageView);
                 break;
             case KIRTAN:
             case LECTURE:
-                titleView.setText(mItem.author);
+                titleView.setText(content.author);
 
                 YouTubePlayerSupportFragment youTubePlayerFragment
                         = (YouTubePlayerSupportFragment) getChildFragmentManager().findFragmentById(R.id.youtube_fragment);
@@ -143,7 +181,7 @@ public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInit
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(ARG_ITEM, mItem);
+        outState.putParcelable(ARG_ITEM, content);
         super.onSaveInstanceState(outState);
     }
 
@@ -151,7 +189,7 @@ public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInit
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
         if (!wasRestored) {
 //                            youTubePlayer.setFullscreen(true);
-            youTubePlayer.loadVideo(YouTubeUtil.getVideoKey(mItem.url));
+            youTubePlayer.loadVideo(YouTubeUtil.getVideoKey(content.url));
             youTubePlayer.play();
         }
     }
@@ -170,11 +208,11 @@ public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInit
         MenuItem menuItem = menu.findItem(R.id.action_share);
 
         // Get the provider and hold onto it to set/change the share intent.
-        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
 
         // Later: If using cursor, if onLoadFinished happens before this, we can go ahead and set the share intent now.
-        if (mItem != null) {
-            mShareActionProvider.setShareIntent(ShareUtil.getShareIntent(mItem));
+        if (content != null) {
+            mShareActionProvider.setShareIntent(ShareUtil.getShareIntent(content));
         }
     }
 }
