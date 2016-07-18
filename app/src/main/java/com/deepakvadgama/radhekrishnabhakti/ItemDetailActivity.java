@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 /**
@@ -65,6 +66,16 @@ public class ItemDetailActivity extends AppCompatActivity {
             navigateUpTo(new Intent(this, ItemListActivity.class));
             return true;
         }
+        if (id == R.id.action_settings) {
+//            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.detail, menu);
+        return true;
     }
 }

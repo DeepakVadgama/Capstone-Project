@@ -10,8 +10,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -70,6 +68,7 @@ public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInit
         if (appBarLayout != null) {
             appBarLayout.setTitle(content.getTypeInTitleCase());
         }
+        setHasOptionsMenu(true);
     }
 
     private Drawable getDrawable() {
@@ -219,16 +218,25 @@ public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInit
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
         inflater.inflate(R.menu.detail_fragment, menu);
+//
+//        // Retrieve the share menu item
+//        MenuItem menuItem = menu.findItem(R.id.action_share);
+//
+//        // Get the provider and hold onto it to set/change the share intent.
+//        ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+//
+//        // Later: If using cursor, if onLoadFinished happens before this, we can go ahead and set the share intent now.
+//        if (content != null) {
+//            mShareActionProvider.setShareIntent(ShareUtil.getShareIntent(content));
+//        }
+    }
 
-        // Retrieve the share menu item
-        MenuItem menuItem = menu.findItem(R.id.action_share);
-
-        // Get the provider and hold onto it to set/change the share intent.
-        ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
-
-        // Later: If using cursor, if onLoadFinished happens before this, we can go ahead and set the share intent now.
-        if (content != null) {
-            mShareActionProvider.setShareIntent(ShareUtil.getShareIntent(content));
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_share) {
+            ShareUtil.share(getContext(), content);
         }
+        return true;
     }
 }

@@ -2,7 +2,6 @@ package com.deepakvadgama.radhekrishnabhakti;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -170,8 +169,9 @@ public class ContentAdapter extends CursorAdapter {
         h.shareView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent shareIntent = ShareUtil.getShareIntent((Content) v.getTag());
-                context.startActivity(shareIntent);
+//                final Intent shareIntent = ShareUtil.getShareIntent(context, (Content) v.getTag());
+//                context.startActivity(Intent.createChooser(shareIntent, "Share " + content.getTypeInTitleCase()));
+                ShareUtil.share(context, (Content) v.getTag());
             }
         });
     }
