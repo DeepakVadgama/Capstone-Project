@@ -65,48 +65,10 @@ public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInit
             content = savedInstanceState.getParcelable(ARG_ITEM);
         }
 
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        fab.setImageDrawable(getDrawable());
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                String snackBarText = null;
-                if (!content.isFavorite) {
-                    // Update in preferences
-                    PreferenceUtil.addToFavorites(getActivity(), content.id);
-
-                    // Update favorites table
-                    ContentValues values = new ContentValues();
-                    values.put(DatabaseContract.FavoritesEntry.COLUMN_CONTENT_ID, content.id);
-                    getActivity().getContentResolver().insert(DatabaseContract.FavoritesEntry.CONTENT_URI, values);
-
-                    content.isFavorite = true;
-                    snackBarText = content.getTypeInTitleCase() + " added to favorites";
-                    ((FloatingActionButton) view).setImageDrawable(getDrawable());
-
-                } else {
-                    // Update in preferences
-                    PreferenceUtil.removeFromFavorites(getActivity(), content.id);
-
-                    // Update favorites table
-                    getActivity().getContentResolver().delete(DatabaseContract.FavoritesEntry.CONTENT_URI,
-                            DatabaseContract.FavoritesEntry.COLUMN_CONTENT_ID + " = ? ",
-                            new String[]{String.valueOf(content.id)});
-
-                    content.isFavorite = true;
-                    snackBarText = content.getTypeInTitleCase() + " removed from favorites";
-                    ((FloatingActionButton) view).setImageDrawable(getDrawable());
-                }
-
-                Snackbar.make(view, snackBarText, Snackbar.LENGTH_LONG).show();
-            }
-        });
-
         Activity activity = this.getActivity();
         CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
         if (appBarLayout != null) {
-            appBarLayout.setTitle(content.type);
+            appBarLayout.setTitle(content.getTypeInTitleCase());
         }
     }
 
@@ -124,7 +86,6 @@ public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInit
 
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
         ImageView imageView = ((ImageView) rootView.findViewById(R.id.image));
         View youTubeView = rootView.findViewById(R.id.youtube_fragment);
         TextView titleView = (TextView) rootView.findViewById(R.id.title);
@@ -187,6 +148,48 @@ public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInit
                 authorView.setVisibility(View.VISIBLE);
                 youTubeView.setVisibility(View.VISIBLE);
                 break;
+        }
+
+
+        View fabView = getActivity().findViewById(R.id.fab);
+        if (fabView != null) {
+            FloatingActionButton fab = (FloatingActionButton) fabView;
+            fab.setImageDrawable(getDrawable());
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    String snackBarText = null;
+                    if (!content.isFavorite) {
+                        // Update in preferences
+                        PreferenceUtil.addToFavorites(getActivity(), content.id);
+
+                        // Update favorites table
+                        ContentValues values = new ContentValues();
+                        values.put(DatabaseContract.FavoritesEntry.COLUMN_CONTENT_ID, content.id);
+                        getActivity().getContentResolver().insert(DatabaseContract.FavoritesEntry.CONTENT_URI, values);
+
+                        content.isFavorite = true;
+                        snackBarText = content.getTypeInTitleCase() + " added to favorites";
+                        ((FloatingActionButton) view).setImageDrawable(getDrawable());
+
+                    } else {
+                        // Update in preferences
+                        PreferenceUtil.removeFromFavorites(getActivity(), content.id);
+
+                        // Update favorites table
+                        getActivity().getContentResolver().delete(DatabaseContract.FavoritesEntry.CONTENT_URI,
+                                DatabaseContract.FavoritesEntry.COLUMN_CONTENT_ID + " = ? ",
+                                new String[]{String.valueOf(content.id)});
+
+                        content.isFavorite = false;
+                        snackBarText = content.getTypeInTitleCase() + " removed from favorites";
+                        ((FloatingActionButton) view).setImageDrawable(getDrawable());
+                    }
+
+                    Snackbar.make(view, snackBarText, Snackbar.LENGTH_LONG).show();
+                }
+            });
         }
 
         return rootView;
