@@ -2,6 +2,7 @@ package com.deepakvadgama.radhekrishnabhakti;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -65,6 +66,7 @@ public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInit
         }
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        fab.setImageDrawable(getDrawable());
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +83,7 @@ public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInit
 
                     content.isFavorite = true;
                     snackBarText = content.getTypeInTitleCase() + " added to favorites";
-                    ((FloatingActionButton) view).setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_favorite_white_24dp));
+                    ((FloatingActionButton) view).setImageDrawable(getDrawable());
 
                 } else {
                     // Update in preferences
@@ -94,7 +96,7 @@ public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInit
 
                     content.isFavorite = true;
                     snackBarText = content.getTypeInTitleCase() + " removed from favorites";
-                    ((FloatingActionButton) view).setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_favorite_border_white_24dp));
+                    ((FloatingActionButton) view).setImageDrawable(getDrawable());
                 }
 
                 Snackbar.make(view, snackBarText, Snackbar.LENGTH_LONG).show();
@@ -105,6 +107,14 @@ public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInit
         CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
         if (appBarLayout != null) {
             appBarLayout.setTitle(content.type);
+        }
+    }
+
+    private Drawable getDrawable() {
+        if (content.isFavorite) {
+            return ContextCompat.getDrawable(getActivity(), R.drawable.ic_favorite_white_24dp);
+        } else {
+            return ContextCompat.getDrawable(getActivity(), R.drawable.ic_favorite_border_white_24dp);
         }
     }
 
