@@ -26,4 +26,9 @@
     <string name="favorites">favorites</string>
 
     <string name="share_authority" translatable="false">com.deepakvadgama.radhekrishnabhakti.app.shareprovider</string>
+    <string name="suggest_authority" translatable="false">com.deepakvadgama.radhekrishnabhakti.app.SuggestionProvider</string>
+    <string name="search_hint">Enter Search query</string>
+    <string name="app_label">Radhe Krishna</string>
+    <string name="search">Search</string>
+    <string name="title_search">Search Results..</string>
 </resources>

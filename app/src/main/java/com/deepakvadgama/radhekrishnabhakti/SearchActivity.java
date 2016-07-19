@@ -1,9 +1,11 @@
 package com.deepakvadgama.radhekrishnabhakti;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -14,7 +16,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.deepakvadgama.radhekrishnabhakti.data.ContentProvider;
 import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
 
 /**
@@ -25,16 +26,17 @@ import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class FavoritesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
+public class SearchActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
 
-    public final String LOG_TAG = FavoritesActivity.class.getSimpleName();
+    public final String LOG_TAG = SearchActivity.class.getSimpleName();
 
     private static final String SELECTED_KEY = "selected_position";
-    private static final int CONTENT_LOADER = 1;
+    private static final int CONTENT_LOADER = 2;
     private boolean mTwoPane;
     private ContentAdapter mContentAdapter;
     private int mPosition = ListView.INVALID_POSITION;
     private ListView mListView;
+    private String mQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,9 @@ public class FavoritesActivity extends AppCompatActivity implements LoaderManage
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        // Get the intent, verify the action and get the query
+        handleIntent(getIntent());
 
         mContentAdapter = new ContentAdapter(this, null, 0);
 
@@ -69,6 +74,21 @@ public class FavoritesActivity extends AppCompatActivity implements LoaderManage
 
         // Main Sauce - Here loader is created if not present, or already created loader is reused.
         getSupportLoaderManager().initLoader(CONTENT_LOADER, null, this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
+                    SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
+            suggestions.saveRecentQuery(query, null);
+            mQuery = query;
+        }
     }
 
 
@@ -115,9 +135,9 @@ public class FavoritesActivity extends AppCompatActivity implements LoaderManage
 
         // Since activity uses only 1 loader, we are not using id/LOADER_ID
         return new CursorLoader(this,
-                DatabaseContract.ContentEntry.CONTENT_URI,
+                DatabaseContract.ContentEntry.buildContentSearchWithAny(mQuery),
                 DatabaseContract.CONTENT_COLUMNS,
-                ContentProvider.sFavoriteSelection,
+                null,
                 null,
                 null);
     }
