@@ -34,13 +34,13 @@ import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.Content
 
 /**
  * A fragment representing a single Item detail screen.
- * This fragment is either contained in a {@link ItemListActivity}
- * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
+ * This fragment is either contained in a {@link MainActivity}
+ * in two-pane mode (on tablets) or a {@link DetailActivity}
  * on handsets.
  */
-public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInitializedListener {
+public class DetailFragment extends Fragment implements YouTubePlayer.OnInitializedListener {
 
-    public static final String TAG = "ItemDetailFragment";
+    public static final String TAG = "DetailFragment";
     public static final String ARG_ITEM = "item";
 
     // Accept Content directly instead of URI, then loading data from Cursor
@@ -48,7 +48,7 @@ public class ItemDetailFragment extends Fragment implements YouTubePlayer.OnInit
     private Content content;
 
     // Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
-    public ItemDetailFragment() {
+    public DetailFragment() {
     }
 
     @Override

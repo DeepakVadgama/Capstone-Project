@@ -30,13 +30,13 @@ import com.google.android.gms.common.api.GoogleApiClient;
  * An activity representing a list of Items. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link ItemDetailActivity} representing
+ * lead to a {@link DetailActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class ItemListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, GoogleApiClient.OnConnectionFailedListener {
+public class FavoritesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, GoogleApiClient.OnConnectionFailedListener {
 
-    public final String LOG_TAG = ItemListActivity.class.getSimpleName();
+    public final String LOG_TAG = FavoritesActivity.class.getSimpleName();
 
     private static final String SELECTED_KEY = "selected_position";
     private static final int CONTENT_LOADER = 0;
@@ -85,9 +85,9 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
 
                 if (mTwoPane) {
                     final Bundle args = new Bundle();
-                    args.putParcelable(ItemDetailFragment.ARG_ITEM, (Parcelable) view.getTag(R.id.contentTag));
+                    args.putParcelable(DetailFragment.ARG_ITEM, (Parcelable) view.getTag(R.id.contentTag));
 
-                    final ItemDetailFragment fragment = new ItemDetailFragment();
+                    final DetailFragment fragment = new DetailFragment();
                     fragment.setArguments(args);
 
                     getSupportFragmentManager().beginTransaction()
@@ -95,8 +95,8 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
                             .commit();
 
                 } else {
-                    Intent intent = new Intent(view.getContext(), ItemDetailActivity.class);
-                    intent.putExtra(ItemDetailFragment.ARG_ITEM, (Parcelable) view.getTag(R.id.contentTag));
+                    Intent intent = new Intent(view.getContext(), DetailActivity.class);
+                    intent.putExtra(DetailFragment.ARG_ITEM, (Parcelable) view.getTag(R.id.contentTag));
                     startActivity(intent);
                 }
 
@@ -194,9 +194,9 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
             if (mTwoPane) {
 
                 final Bundle args = new Bundle();
-                args.putParcelable(ItemDetailFragment.ARG_ITEM, content);
+                args.putParcelable(DetailFragment.ARG_ITEM, content);
 
-                final ItemDetailFragment fragment = new ItemDetailFragment();
+                final DetailFragment fragment = new DetailFragment();
                 fragment.setArguments(args);
 
                 getSupportFragmentManager().beginTransaction()
@@ -204,8 +204,8 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
                         .commit();
 
             } else {
-                Intent intent = new Intent(this, ItemDetailActivity.class);
-                intent.putExtra(ItemDetailFragment.ARG_ITEM, content);
+                Intent intent = new Intent(this, DetailActivity.class);
+                intent.putExtra(DetailFragment.ARG_ITEM, content);
                 startActivity(intent);
             }
 
@@ -222,9 +222,9 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
             }
 
             final Bundle args = new Bundle();
-            args.putParcelable(ItemDetailFragment.ARG_ITEM, ContentAdapter.converToContent(cursor));
+            args.putParcelable(DetailFragment.ARG_ITEM, ContentAdapter.converToContent(cursor));
 
-            final ItemDetailFragment fragment = new ItemDetailFragment();
+            final DetailFragment fragment = new DetailFragment();
             fragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()

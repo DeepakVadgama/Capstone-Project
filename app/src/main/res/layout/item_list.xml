@@ -9,4 +9,4 @@
     android:layout_marginRight="16dp"
     android:divider="@null"
     android:descendantFocusability="blocksDescendants"
-    tools:context="com.deepakvadgama.radhekrishnabhakti.ItemListActivity"/>
+    tools:context=".MainActivity"/>

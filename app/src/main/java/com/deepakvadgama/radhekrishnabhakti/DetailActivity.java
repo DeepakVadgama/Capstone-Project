@@ -2,6 +2,7 @@ package com.deepakvadgama.radhekrishnabhakti;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,9 +13,9 @@ import android.view.MenuItem;
  * An activity representing a single Item detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
- * in a {@link ItemListActivity}.
+ * in a {@link MainActivity}.
  */
-public class ItemDetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +42,10 @@ public class ItemDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity using a fragment transaction.
             Bundle args = new Bundle();
-            args.putParcelable(ItemDetailFragment.ARG_ITEM,
-                    getIntent().getParcelableExtra(ItemDetailFragment.ARG_ITEM));
+            args.putParcelable(DetailFragment.ARG_ITEM,
+                    getIntent().getParcelableExtra(DetailFragment.ARG_ITEM));
 
-            ItemDetailFragment fragment = new ItemDetailFragment();
+            DetailFragment fragment = new DetailFragment();
             fragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()
@@ -60,10 +61,11 @@ public class ItemDetailActivity extends AppCompatActivity {
             // This ID represents the Home or Up button. In the case of this
             // activity, the Up button is shown. For
             // more details, see the Navigation pattern on Android Design:
-            //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            navigateUpTo(new Intent(this, ItemListActivity.class));
+            final Intent intent = NavUtils.getParentActivityIntent(this);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            NavUtils.navigateUpTo(this, intent);
             return true;
         }
         if (id == R.id.action_settings) {

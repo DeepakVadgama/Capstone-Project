@@ -11,7 +11,7 @@ import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
 import android.support.v4.app.TaskStackBuilder;
 
-import com.deepakvadgama.radhekrishnabhakti.ItemListActivity;
+import com.deepakvadgama.radhekrishnabhakti.MainActivity;
 import com.deepakvadgama.radhekrishnabhakti.R;
 import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
 import com.deepakvadgama.radhekrishnabhakti.pojo.Content;
@@ -86,8 +86,8 @@ public class NotificationUtil {
                             .setSummaryText(title));
                 }
 
-                Intent resultIntent = new Intent(context, ItemListActivity.class);
-                resultIntent.putExtra(ItemListActivity.ARG_ITEM, content);
+                Intent resultIntent = new Intent(context, MainActivity.class);
+                resultIntent.putExtra(MainActivity.ARG_ITEM, content);
 
                 // The stack builder object will contain an artificial back stack for the started Activity.
                 // This ensures that navigating backward from the Activity leads out of
