@@ -41,6 +41,7 @@ public class ContentProvider extends android.content.ContentProvider {
                         "." + FavoritesEntry.COLUMN_CONTENT_ID + ")");
     }
 
+    public static final String sFavoriteSelection = FavoritesEntry.TABLE_NAME + "." + FavoritesEntry.COLUMN_CONTENT_ID + " IS NOT NULL ";
     private static final String sTitleSelection = ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_TITLE + " like ? ";
     private static final String sTypeSelection = ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_TYPE + " = ? ";
     private static final String sAuthorSelection = ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_AUTHOR + " like ? ";

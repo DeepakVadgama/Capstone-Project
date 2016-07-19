@@ -11,6 +11,8 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -34,7 +36,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, GoogleApiClient.OnConnectionFailedListener, AdapterView.OnItemClickListener {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
+        GoogleApiClient.OnConnectionFailedListener,
+        AdapterView.OnItemClickListener {
 
     public final String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -88,6 +92,26 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (!PreferenceUtil.isAccountSelected.get()) {
             selectGoogleAccount();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_go_to_favorites) {
+            startActivity(new Intent(this, FavoritesActivity.class));
+            return true;
+        }
+        if (id == R.id.action_settings) {
+//            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void selectGoogleAccount() {
@@ -214,12 +238,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // Tablet, on data load, open details view
         if (mTwoPane) {
 
+            // TODO: Is this even required since every view has the tag/content set already?
             if (mPosition != ListView.INVALID_POSITION) {
                 cursor.moveToPosition(mPosition);
             } else {
                 cursor.moveToFirst();
             }
 
+            // Consider clicking onItemClick to avoid this duplication
             final Bundle args = new Bundle();
             args.putParcelable(DetailFragment.ARG_ITEM, ContentAdapter.converToContent(cursor));
 
