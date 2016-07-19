@@ -237,6 +237,7 @@ public class ContentProvider extends android.content.ContentProvider {
                     returnUri = ContentEntry.buildContentUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
+                getContext().getContentResolver().notifyChange(uri, null);
                 break;
             }
             case FAVORITES: {
@@ -250,7 +251,6 @@ public class ContentProvider extends android.content.ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-        getContext().getContentResolver().notifyChange(uri, null);
         return returnUri;
     }
 
@@ -265,6 +265,11 @@ public class ContentProvider extends android.content.ContentProvider {
             case CONTENT:
                 rowsDeleted = db.delete(
                         ContentEntry.TABLE_NAME, selection, selectionArgs);
+
+                // Because a null deletes all rows
+                if (rowsDeleted != 0) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
                 break;
             case FAVORITES:
                 rowsDeleted = db.delete(
@@ -273,10 +278,7 @@ public class ContentProvider extends android.content.ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-        // Because a null deletes all rows
-        if (rowsDeleted != 0) {
-            getContext().getContentResolver().notifyChange(uri, null);
-        }
+
         return rowsDeleted;
     }
 
@@ -291,6 +293,9 @@ public class ContentProvider extends android.content.ContentProvider {
             case CONTENT:
                 rowsUpdated = db.update(ContentEntry.TABLE_NAME, values, selection,
                         selectionArgs);
+                if (rowsUpdated != 0) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
                 break;
             case FAVORITES:
                 rowsUpdated = db.update(FavoritesEntry.TABLE_NAME, values, selection,
@@ -299,9 +304,7 @@ public class ContentProvider extends android.content.ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-        if (rowsUpdated != 0) {
-            getContext().getContentResolver().notifyChange(uri, null);
-        }
+
         return rowsUpdated;
     }
 

@@ -109,7 +109,9 @@ public class ItemListActivity extends AppCompatActivity implements LoaderManager
 
         ContentSyncAdapter.initializeSyncAdapter(this);
 
-        selectGoogleAccount();
+        if (!PreferenceUtil.isAccountSelected.get()) {
+            selectGoogleAccount();
+        }
     }
 
     private void selectGoogleAccount() {

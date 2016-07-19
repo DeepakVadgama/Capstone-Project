@@ -147,6 +147,7 @@ public class ContentAdapter extends CursorAdapter {
                 ContentValues values = new ContentValues();
                 values.put(FavoritesEntry.COLUMN_CONTENT_ID, content.id);
                 context.getContentResolver().insert(FavoritesEntry.CONTENT_URI, values);
+                content.isFavorite = true;
             }
 
             @Override
@@ -161,6 +162,7 @@ public class ContentAdapter extends CursorAdapter {
                 context.getContentResolver().delete(FavoritesEntry.CONTENT_URI,
                         FavoritesEntry.COLUMN_CONTENT_ID + " = ? ",
                         new String[]{String.valueOf(content.id)});
+                content.isFavorite = false;
             }
         });
 

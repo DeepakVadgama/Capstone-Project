@@ -23,8 +23,11 @@ import com.deepakvadgama.radhekrishnabhakti.R;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PreferenceUtil {
+
+    public static AtomicBoolean isAccountSelected = new AtomicBoolean(false);
 
     public static String getEmail(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -47,6 +50,7 @@ public class PreferenceUtil {
         editor.putString(context.getString(R.string.pref_user_email), email);
         editor.putString(context.getString(R.string.pref_user_name), name);
         editor.putString(context.getString(R.string.pref_user_url), url);
+        isAccountSelected.set(true);
         editor.commit();
     }
 
