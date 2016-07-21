@@ -8,12 +8,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 
 import com.deepakvadgama.radhekrishnabhakti.MainActivity;
 import com.deepakvadgama.radhekrishnabhakti.R;
-import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
 import com.deepakvadgama.radhekrishnabhakti.pojo.Content;
 
 import java.io.IOException;
@@ -21,31 +23,29 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.ContentType;
+
 public class NotificationUtil {
 
-    private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
+    private static final long FOUR_HOURS = 4 * 60 * 1000;
     private static final int NOTIFICATION_ID = 0;
 
     public static void notify(Context context, Content content) {
 
-        //checking the last update and notify if it' the first of the day
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String displayNotificationsKey = context.getString(R.string.pref_enable_notifications_key);
-        boolean displayNotifications = prefs.getBoolean(displayNotificationsKey, true);
 
-        if (displayNotifications) {
+        //checking if notifications are enabled.
+        if (isNotificationEnabled(context, prefs)) {
 
-            String lastNotificationKey = context.getString(R.string.pref_last_notification);
-            long lastSync = prefs.getLong(lastNotificationKey, 0);
+            long lastSync = prefs.getLong(context.getString(R.string.pref_last_notification), 0);
 
-            if (System.currentTimeMillis() - lastSync >= DAY_IN_MILLIS) {
+            //checking the last update and notify if it' the first of the day
+            if (System.currentTimeMillis() - lastSync >= FOUR_HOURS) {
 
                 String title = "";
                 String contentText = "";
-                Bitmap largeIcon = null;
 
-                // Define the text of the forecast.
-                final DatabaseContract.ContentType type = DatabaseContract.ContentType.valueOf(content.type);
+                final ContentType type = ContentType.valueOf(content.type);
                 switch (type) {
                     case QUOTE:
                         title = "Quote - " + content.author;
@@ -55,35 +55,20 @@ public class NotificationUtil {
                         title = "Story - " + content.title;
                         contentText = content.text.substring(0, 140) + "...";
                         break;
-                    case PICTURE:
-                        title = "Picture - " + content.title;
-                        largeIcon = getBitmapFromURL(content.url);
-                        break;
-                    case KIRTAN:
-                        title = "Kirtan - " + content.title;
-                        largeIcon = getBitmapFromURL(content.url);
-                        break;
-                    case LECTURE:
-                        title = "Lecture - " + content.title;
-                        largeIcon = getBitmapFromURL(YouTubeUtil.getThumbnailUrlString(content.url));
-                        break;
+                    default:
+                        // Images cannot be loaded in main thread, thus this async task & duplication of code
+                        new LoadPictureAndNotifyTask(context, content).execute();
+                        return;
                 }
 
-                // NotificationCompatBuilder is a very convenient way to build backward-compatible
-                // notifications.  Just throw in some data.
-                Notification.Builder mBuilder =
-                        new Notification.Builder(context)
-//                                .setColor(resources.getColor(R.color.sunshine_light_blue))
-                                .setSmallIcon(R.drawable.ic_favorite_white_24dp) // Change later
-                                .setContentTitle(title)
-                                .setContentText(contentText);
+                Notification.Builder mBuilder = new Notification.Builder(context);
+                mBuilder.setSmallIcon(R.drawable.ic_favorite_white_24dp) // Change later
+                        .setContentTitle(title)
+                        .setContentText(contentText);
 
-                if (largeIcon != null) {
-                    mBuilder.setLargeIcon(largeIcon);
-                    mBuilder.setStyle(new Notification.BigPictureStyle()
-                            .bigPicture(largeIcon)
-                            .setBigContentTitle(title)
-                            .setSummaryText(title));
+                String ringTone = prefs.getString(context.getString(R.string.notifications_ringtone), null);
+                if (ringTone != null) {
+                    mBuilder.setSound(Uri.parse(ringTone));
                 }
 
                 Intent resultIntent = new Intent(context, MainActivity.class);
@@ -107,12 +92,109 @@ public class NotificationUtil {
 
                 //refreshing last sync
                 SharedPreferences.Editor editor = prefs.edit();
-                editor.putLong(lastNotificationKey, System.currentTimeMillis());
+                editor.putLong(context.getString(R.string.pref_last_notification), System.currentTimeMillis());
                 editor.commit();
 
             }
         }
     }
+
+    private static boolean isNotificationEnabled(Context context, SharedPreferences prefs) {
+        String displayNotificationsKey = context.getString(R.string.pref_enable_notifications_key);
+        return prefs.getBoolean(displayNotificationsKey, true);
+    }
+
+    static class LoadPictureAndNotifyTask extends AsyncTask<Void, Void, Bitmap> {
+
+        private final Context context;
+        private final Content content;
+
+        LoadPictureAndNotifyTask(Context context, Content content) {
+            this.context = context;
+            this.content = content;
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... params) {
+            try {
+
+                String urlString = content.url;
+                final ContentType type = ContentType.valueOf(content.type);
+                if (type == ContentType.LECTURE || type == ContentType.KIRTAN) {
+                    urlString = YouTubeUtil.getThumbnailUrlString(content.url);
+                }
+
+                return getBitmapFromURL(urlString);
+
+            } catch (Exception ex) {
+                Log.w("NOTIFICATION", "Download image for notification failed - ", ex);
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            if (result == null) {
+                return;
+            }
+
+
+            final ContentType type = ContentType.valueOf(content.type);
+            String title = null;
+            switch (type) {
+                case PICTURE:
+                    title = "Picture - " + content.title;
+                    break;
+                case KIRTAN:
+                    title = "Kirtan - " + content.title;
+                    break;
+                case LECTURE:
+                    title = "Lecture - " + content.title;
+                    break;
+            }
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+            Notification.Builder mBuilder = new Notification.Builder(context);
+            mBuilder.setSmallIcon(R.drawable.ic_favorite_white_24dp) // Change later
+                    .setContentTitle(title);
+
+            String ringTone = prefs.getString(context.getString(R.string.notifications_ringtone), null);
+            if (ringTone != null) {
+                mBuilder.setSound(Uri.parse(ringTone));
+            }
+
+            mBuilder.setLargeIcon(result);
+            mBuilder.setStyle(new Notification.BigPictureStyle()
+                    .bigPicture(result)
+                    .setBigContentTitle(title));
+
+            Intent resultIntent = new Intent(context, MainActivity.class);
+            resultIntent.putExtra(MainActivity.ARG_ITEM, content);
+
+            // The stack builder object will contain an artificial back stack for the started Activity.
+            // This ensures that navigating backward from the Activity leads out of
+            // your application to the Home screen.
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent =
+                    stackBuilder.getPendingIntent(
+                            0,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+            mBuilder.setContentIntent(resultPendingIntent);
+
+            NotificationManager mNotificationManager =
+                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+
+            //refreshing last sync
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putLong(context.getString(R.string.pref_last_notification), System.currentTimeMillis());
+            editor.commit();
+        }
+    }
+
 
     public static Bitmap getBitmapFromURL(String strURL) {
         try {

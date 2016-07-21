@@ -15,6 +15,9 @@
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
     <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
 
+    <!-- For notification ringtone -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -48,11 +51,11 @@
             android:name=".SearchActivity"
             android:label="@string/title_search"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable"/>
@@ -78,7 +81,6 @@
             android:exported="false"
             android:grantUriPermissions="true"/>
 
-
         <!-- SyncAdapter's dummy authentication service -->
         <service android:name=".sync.AuthenticatorService">
             <intent-filter>
@@ -103,6 +105,14 @@
                 android:resource="@xml/syncadapter"/>
         </service>
 
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.deepakvadgama.radhekrishnabhakti.MainActivity"/>
+        </activity>
     </application>
 
 </manifest>

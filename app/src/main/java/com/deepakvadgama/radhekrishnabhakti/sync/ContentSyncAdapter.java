@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Set;
 
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -39,10 +38,6 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
 
     public final String LOG_TAG = ContentSyncAdapter.class.getSimpleName();
 
-    // Interval at which to sync with the weather, in milliseconds.
-    // 60 seconds (1 minute)  120 = 2 hours
-    public static final int SYNC_INTERVAL = 60 * 120;
-    public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
     private RetrofitService mService;
 
     public ContentSyncAdapter(Context context, boolean autoInitialize) {
@@ -57,15 +52,14 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private void initRetrofit() {
 
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        // set your desired log level
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+//        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+//        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         // add your other interceptors …
 
         // add logging as last interceptor
-        httpClient.addInterceptor(logging);  // <-- this is the important line!
+//        httpClient.addInterceptor(logging);  // For testing
 
         Retrofit mRetrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.SERVER_ADDRESS)
@@ -224,7 +218,7 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
                 new String[]{ContentEntry.TABLE_NAME + "." + ContentEntry._ID},
                 null,
                 null,
-                ContentEntry._ID + " DESC"
+                ContentEntry.TABLE_NAME + "." + ContentEntry._ID + " DESC"
         );
         if (cursor.moveToFirst()) {
             latestId = cursor.getInt(0);
@@ -232,6 +226,7 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
         cursor.close();
         return latestId;
     }
+
 
     public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
         Account account = getSyncAccount(context);
@@ -246,6 +241,12 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
         } else {
             ContentResolver.addPeriodicSync(account, authority, new Bundle(), syncInterval);
         }
+    }
+
+    public static void removePeriodicSync(Context context) {
+        Account account = getSyncAccount(context);
+        String authority = context.getString(R.string.content_authority);
+        ContentResolver.removePeriodicSync(account, authority, new Bundle());
     }
 
     public static void syncImmediately(Context context) {
@@ -289,7 +290,11 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
         /*
          * Since we've created an account
          */
-        ContentSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        final String frequencyStr = preferences.getString(context.getString(R.string.sync_frequency), "120");
+        final int syncInterval = Integer.parseInt(frequencyStr) * 60;
+        final int syncFlextime = syncInterval / 3;
+        ContentSyncAdapter.configurePeriodicSync(context, syncInterval, syncFlextime);
 
         /*
          * Without calling setSyncAutomatically, our periodic sync will not be enabled.
@@ -305,4 +310,6 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
     public static void initializeSyncAdapter(Context context) {
         getSyncAccount(context);
     }
+
+
 }

@@ -68,6 +68,7 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
         if (appBarLayout != null) {
             appBarLayout.setTitle(content.getTypeInTitleCase());
         }
+
         setHasOptionsMenu(true);
     }
 
