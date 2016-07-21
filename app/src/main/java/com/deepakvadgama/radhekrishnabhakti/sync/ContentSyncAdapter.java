@@ -115,7 +115,7 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
             editor.putBoolean(getContext().getString(R.string.pref_favorites_updated), false);
             editor.remove(getContext().getString(R.string.pref_favorites_added));
             editor.remove(getContext().getString(R.string.pref_favorites_removed));
-            editor.commit();
+            editor.apply();
         }
 
     }
@@ -129,7 +129,7 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = prefs.edit();
         editor.putLong(getContext().getString(R.string.pref_last_notification), System.currentTimeMillis());
-        editor.commit();
+        editor.apply();
     }
 
     private void populateContent(int latestId) {

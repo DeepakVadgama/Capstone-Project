@@ -51,7 +51,7 @@ public class PreferenceUtil {
         editor.putString(context.getString(R.string.pref_user_name), name);
         editor.putString(context.getString(R.string.pref_user_url), url);
         isAccountSelected.set(true);
-        editor.commit();
+        editor.apply();
     }
 
     public static void addToFavorites(Context context, int id) {
@@ -60,6 +60,7 @@ public class PreferenceUtil {
         final Set<String> stringSet = prefs.getStringSet(context.getString(R.string.pref_favorites_added), new HashSet<String>());
         stringSet.add(String.valueOf(id));
         editor.putStringSet(context.getString(R.string.pref_favorites_added), stringSet);
+        editor.apply();
     }
 
 
@@ -70,5 +71,6 @@ public class PreferenceUtil {
         stringSet.remove(
                 String.valueOf(id));
         editor.putStringSet(context.getString(R.string.pref_favorites_added), stringSet);
+        editor.apply();
     }
 }

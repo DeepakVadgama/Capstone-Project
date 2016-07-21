@@ -93,7 +93,7 @@ public class NotificationUtil {
                 //refreshing last sync
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putLong(context.getString(R.string.pref_last_notification), System.currentTimeMillis());
-                editor.commit();
+                editor.apply();
 
             }
         }
@@ -191,7 +191,7 @@ public class NotificationUtil {
             //refreshing last sync
             SharedPreferences.Editor editor = prefs.edit();
             editor.putLong(context.getString(R.string.pref_last_notification), System.currentTimeMillis());
-            editor.commit();
+            editor.apply();
         }
     }
 
