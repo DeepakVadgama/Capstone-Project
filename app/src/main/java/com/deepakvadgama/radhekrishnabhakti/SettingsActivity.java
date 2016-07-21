@@ -228,32 +228,34 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 //            bindPreferenceSummaryToValue(syncPreference);
 
             // Set summary for default value.
-            updateSummary(preference);
+            updateSummary(preference, null);
 
             preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
 
-                    final int SYNC_INTERVAL = 60 * Integer.parseInt((String) newValue);
+                    final String newValueStr = (String) newValue;
+                    final int SYNC_INTERVAL = 60 * Integer.parseInt(newValueStr);
                     final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
                     ContentSyncAdapter.removePeriodicSync(getActivity());
                     ContentSyncAdapter.configurePeriodicSync(getActivity(), SYNC_INTERVAL, SYNC_FLEXTIME);
 
-                    updateSummary(preference);
+                    updateSummary(preference, newValueStr);
 
                     return true;
                 }
             });
         }
 
-        private boolean updateSummary(Preference preference) {
+        private void updateSummary(Preference preference, String newValue) {
             ListPreference listPreference = (ListPreference) preference;
-            int index = listPreference.findIndexOfValue(((ListPreference) preference).getValue());
+            if (newValue == null) {
+                newValue = (listPreference).getValue();
+            }
+            int index = listPreference.findIndexOfValue(newValue);
 
             // Set the summary to reflect the new value.
             preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
-
-            return true;
         }
 
         @Override
