@@ -45,7 +45,7 @@ public class ContentProvider extends android.content.ContentProvider {
     private static final String sTitleSelection = ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_TITLE + " like ? ";
     private static final String sTypeSelection = ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_TYPE + " = ? ";
     private static final String sAuthorSelection = ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_AUTHOR + " like ? ";
-    private static final String sSearchSelection = ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_AUTHOR + " = ? OR " +
+    private static final String sSearchSelection = ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_AUTHOR + " like ? OR " +
             ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_TITLE + " like ? OR " +
             ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_TYPE + " = ? OR " +
             ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_TEXT + " like ? ";
@@ -53,7 +53,7 @@ public class ContentProvider extends android.content.ContentProvider {
     private Cursor getContentBySearch(Uri uri, String[] projection, String sortOrder) {
 
         String searchText = ContentEntry.getSearchFromUri(uri);
-        String[] selectionArgs = new String[]{searchText, "%" + searchText + "%", searchText, "%" + searchText + "%"};
+        String[] selectionArgs = new String[]{"%" + searchText + "%", "%" + searchText + "%", searchText, "%" + searchText + "%"};
         String selection = sSearchSelection;
 
         return queryBuilder.query(mOpenHelper.getReadableDatabase(),

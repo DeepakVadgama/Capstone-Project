@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
+import com.deepakvadgama.radhekrishnabhakti.util.SearchUtil;
 
 /**
  * An activity representing a list of Items. This activity
@@ -87,7 +88,7 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
             SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
                     SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
             suggestions.saveRecentQuery(query, null);
-            mQuery = query;
+            mQuery = SearchUtil.mapQuery(query);
         }
     }
 
