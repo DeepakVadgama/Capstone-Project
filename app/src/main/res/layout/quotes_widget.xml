@@ -1,0 +1,50 @@
+<LinearLayout android:id="@+id/widget"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@android:color/white"
+              android:orientation="horizontal"
+              android:padding="8dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/application_launcher_image"
+        android:src="@mipmap/ic_launcher"/>
+
+    <LinearLayout
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp">
+
+        <TextView
+            android:id="@+id/widget_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:paddingLeft="16dp"
+            android:paddingStart="16dp"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="@android:color/darker_gray"
+            tools:text=" &quot; Arise! Awake! And Stop not until the goal is achieved &quot;"/>
+
+        <TextView
+            android:id="@+id/widget_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="end"
+            android:paddingLeft="16dp"
+            android:paddingStart="16dp"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@android:color/black"
+            tools:text="Swami Vivekanand"/>
+
+    </LinearLayout>
+
+</LinearLayout>
