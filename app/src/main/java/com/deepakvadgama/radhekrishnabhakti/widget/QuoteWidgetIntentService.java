@@ -34,6 +34,7 @@ import com.deepakvadgama.radhekrishnabhakti.pojo.Content;
 
 import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.CONTENT_COLUMNS;
 import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.ContentEntry;
+import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.ContentType;
 
 /**
  * IntentService which handles updating all widgets with the latest data
@@ -60,8 +61,8 @@ public class QuoteWidgetIntentService extends IntentService {
         Cursor data = getContentResolver().query(
                 ContentEntry.CONTENT_URI,
                 CONTENT_COLUMNS,
-                ContentEntry.TABLE_NAME + "." + ContentEntry._ID + " > ? ",
-                new String[]{String.valueOf(content_id)},
+                ContentEntry.TABLE_NAME + "." + ContentEntry._ID + " > ? AND " + ContentEntry.TABLE_NAME + "." + ContentEntry.COLUMN_TYPE + " = ?",
+                new String[]{String.valueOf(content_id), ContentType.QUOTE.toString()},
                 ContentEntry.TABLE_NAME + "." + ContentEntry._ID + " ASC");
 
         if (data == null) {
