@@ -1,5 +1,6 @@
 package com.deepakvadgama.radhekrishnabhakti;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -48,14 +49,11 @@ public class DetailActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-//            final Intent intent = NavUtils.getParentActivityIntent(this);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            NavUtils.navigateUpTo(this, intent);
             finish();
             return true;
         }
         if (id == R.id.action_settings) {
-//            startActivity(new Intent(this, SettingsActivity.class));
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
