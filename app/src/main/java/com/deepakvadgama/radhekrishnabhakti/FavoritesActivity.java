@@ -31,7 +31,6 @@ public class FavoritesActivity extends AppCompatActivity implements LoaderManage
 
     private static final String SELECTED_KEY = "selected_position";
     private static final int CONTENT_LOADER = 1;
-    private boolean mTwoPane;
     private ContentAdapter mContentAdapter;
     private int mPosition = ListView.INVALID_POSITION;
     private ListView mListView;
@@ -53,12 +52,6 @@ public class FavoritesActivity extends AppCompatActivity implements LoaderManage
 
         mContentAdapter = new ContentAdapter(this, null, 0);
 
-        // Tablet
-        if (findViewById(R.id.item_detail_container) != null) {
-            mTwoPane = true;
-            mContentAdapter.setTwoPane(true);
-        }
-
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
@@ -74,22 +67,9 @@ public class FavoritesActivity extends AppCompatActivity implements LoaderManage
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (mTwoPane) {
-            final Bundle args = new Bundle();
-            args.putParcelable(DetailFragment.ARG_ITEM, (Parcelable) view.getTag(R.id.contentTag));
-
-            final DetailFragment fragment = new DetailFragment();
-            fragment.setArguments(args);
-
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.item_detail_container, fragment)
-                    .commit();
-
-        } else {
-            Intent intent = new Intent(this, DetailActivity.class);
-            intent.putExtra(DetailFragment.ARG_ITEM, (Parcelable) view.getTag(R.id.contentTag));
-            startActivity(intent);
-        }
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(DetailFragment.ARG_ITEM, (Parcelable) view.getTag(R.id.contentTag));
+        startActivity(intent);
 
         mPosition = position;
     }
@@ -127,28 +107,6 @@ public class FavoritesActivity extends AppCompatActivity implements LoaderManage
         mContentAdapter.swapCursor(cursor);
         if (mPosition != ListView.INVALID_POSITION) {
             mListView.smoothScrollToPosition(mPosition);
-        }
-
-        // Tablet, on data load, open details view
-        if (mTwoPane) {
-
-            // TODO: Is this even required?
-            if (mPosition != ListView.INVALID_POSITION) {
-                cursor.moveToPosition(mPosition);
-            } else {
-                cursor.moveToFirst();
-            }
-
-            // Consider clicking the itemm instead to avoid this duplication
-            final Bundle args = new Bundle();
-            args.putParcelable(DetailFragment.ARG_ITEM, ContentAdapter.converToContent(cursor));
-
-            final DetailFragment fragment = new DetailFragment();
-            fragment.setArguments(args);
-
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.item_detail_container, fragment)
-                    .commit();
         }
     }
 

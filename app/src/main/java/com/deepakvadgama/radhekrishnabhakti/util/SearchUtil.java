@@ -1,9 +1,9 @@
 package com.deepakvadgama.radhekrishnabhakti.util;
 
-import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract.ContentType;
 
 public class SearchUtil {
 
@@ -24,13 +24,13 @@ public class SearchUtil {
         }
 
         try {
-            DatabaseContract.ContentType.valueOf(query.toUpperCase());
+            ContentType.valueOf(query.toUpperCase());
             query = query.toUpperCase();
             return query;
         } catch (IllegalArgumentException e) {
         }
 
-        if (searchMap.containsKey(query)) {
+        if (searchMap.containsKey(query.toLowerCase())) {
             return searchMap.get(query);
         }
 

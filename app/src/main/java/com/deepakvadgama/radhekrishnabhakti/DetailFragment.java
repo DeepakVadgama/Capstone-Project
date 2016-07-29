@@ -43,7 +43,7 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
     public static final String TAG = "DetailFragment";
     public static final String ARG_ITEM = "item";
 
-    // Accept Content directly instead of URI, then loading data from Cursor
+    // Accept Content directly instead of URI, then load data from Cursor
     // Cursor is not needed here since data is not expected to change (unlike Sunshine app)
     private Content content;
 

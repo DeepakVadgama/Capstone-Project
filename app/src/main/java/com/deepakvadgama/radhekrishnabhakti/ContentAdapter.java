@@ -36,7 +36,6 @@ public class ContentAdapter extends CursorAdapter {
     private static final int COLUMN_FAVORITE = 6;
     private static final int RECOVERY_REQUEST = 1;
     private static final int CONTENT_TAG = 1;
-    private boolean mTwoPane = false;
 
     public static class ViewHolder {
 
@@ -171,8 +170,6 @@ public class ContentAdapter extends CursorAdapter {
         h.shareView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                final Intent shareIntent = ShareUtil.getShareIntent(context, (Content) v.getTag());
-//                context.startActivity(Intent.createChooser(shareIntent, "Share " + content.getTypeInTitleCase()));
                 ShareUtil.share(context, (Content) v.getTag());
             }
         });
@@ -190,13 +187,5 @@ public class ContentAdapter extends CursorAdapter {
         content.author = cursor.getString(COLUMN_AUTHOR);
         content.isFavorite = cursor.getString(COLUMN_FAVORITE) != null;
         return content;
-    }
-
-    public boolean ismTwoPane() {
-        return mTwoPane;
-    }
-
-    public void setTwoPane(boolean mTwoPane) {
-        this.mTwoPane = mTwoPane;
     }
 }

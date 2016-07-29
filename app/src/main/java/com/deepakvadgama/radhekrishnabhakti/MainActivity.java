@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final int CONTENT_LOADER = 0;
     private static final int REQUEST_CODE = 10;
     public static final String ARG_ITEM = "CONTENT_ITEM";
-    private boolean mTwoPane;
     private ContentAdapter mContentAdapter;
     private LoaderManager.LoaderCallbacks<Cursor> mCallbacks;
     private GoogleApiClient mGoogleApiClient;
@@ -72,13 +71,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // that we have passed the '0' flag as the last argument. This prevents the adapter from registering a ContentObserver for the
         // Cursor (the CursorLoader will do this for us!).
         mContentAdapter = new ContentAdapter(this, null, 0);
-
-        // Tablet
-        if (findViewById(R.id.item_detail_container) != null) {
-            mTwoPane = true;
-            mContentAdapter.setTwoPane(true);
-            // At this point there is no data, so load fragment after cursor load finishes.
-        }
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
@@ -171,22 +163,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (mTwoPane) {
-            final Bundle args = new Bundle();
-            args.putParcelable(DetailFragment.ARG_ITEM, (Parcelable) view.getTag(R.id.contentTag));
-
-            final DetailFragment fragment = new DetailFragment();
-            fragment.setArguments(args);
-
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.item_detail_container, fragment)
-                    .commit();
-
-        } else {
-            Intent intent = new Intent(this, DetailActivity.class);
-            intent.putExtra(DetailFragment.ARG_ITEM, (Parcelable) view.getTag(R.id.contentTag));
-            startActivity(intent);
-        }
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(DetailFragment.ARG_ITEM, (Parcelable) view.getTag(R.id.contentTag));
+        startActivity(intent);
 
         mPosition = position;
     }
@@ -228,49 +207,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         // If Activity is triggered from Notification or Widget, open details screen.
         if (getIntent().getParcelableExtra(ARG_ITEM) != null) {
-
             Content content = getIntent().getParcelableExtra(ARG_ITEM);
-            if (mTwoPane) {
-
-                final Bundle args = new Bundle();
-                args.putParcelable(DetailFragment.ARG_ITEM, content);
-
-                final DetailFragment fragment = new DetailFragment();
-                fragment.setArguments(args);
-
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.item_detail_container, fragment)
-                        .commit();
-
-            } else {
-                Intent intent = new Intent(this, DetailActivity.class);
-                intent.putExtra(DetailFragment.ARG_ITEM, content);
-                startActivity(intent);
-            }
-
-            return;
-        }
-
-        // Tablet, on data load, open details view
-        if (mTwoPane) {
-
-            // TODO: Is this even required since every view has the tag/content set already?
-            if (mPosition != ListView.INVALID_POSITION) {
-                cursor.moveToPosition(mPosition);
-            } else {
-                cursor.moveToFirst();
-            }
-
-            // Consider clicking onItemClick to avoid this duplication
-            final Bundle args = new Bundle();
-            args.putParcelable(DetailFragment.ARG_ITEM, ContentAdapter.converToContent(cursor));
-
-            final DetailFragment fragment = new DetailFragment();
-            fragment.setArguments(args);
-
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.item_detail_container, fragment)
-                    .commit();
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra(DetailFragment.ARG_ITEM, content);
+            startActivity(intent);
         }
     }
 
