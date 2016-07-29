@@ -8,7 +8,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -62,7 +61,8 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
             content = savedInstanceState.getParcelable(ARG_ITEM);
         }
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(content.getTypeInTitleCase());
+//        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(content.getTypeInTitleCase());
+        getActivity().setTitle(content.getTypeInTitleCase());
 
         setHasOptionsMenu(true);
     }
