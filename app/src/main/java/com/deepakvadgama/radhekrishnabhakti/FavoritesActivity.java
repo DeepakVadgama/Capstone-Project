@@ -8,7 +8,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,7 +24,7 @@ import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class FavoritesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
+public class FavoritesActivity extends GoogleSignInActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
 
     public final String LOG_TAG = FavoritesActivity.class.getSimpleName();
 
@@ -67,11 +66,10 @@ public class FavoritesActivity extends AppCompatActivity implements LoaderManage
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        mPosition = position;
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(DetailFragment.ARG_ITEM, (Parcelable) view.getTag(R.id.contentTag));
         startActivity(intent);
-
-        mPosition = position;
     }
 
     @Override

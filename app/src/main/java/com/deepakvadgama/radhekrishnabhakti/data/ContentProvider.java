@@ -247,6 +247,8 @@ public class ContentProvider extends android.content.ContentProvider {
                     returnUri = FavoritesEntry.buildFavoriteUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
+                getContext().getContentResolver().notifyChange(uri, null);
+                getContext().getContentResolver().notifyChange(ContentEntry.CONTENT_URI, null);
                 break;
             }
             default:
@@ -275,6 +277,10 @@ public class ContentProvider extends android.content.ContentProvider {
             case FAVORITES:
                 rowsDeleted = db.delete(
                         FavoritesEntry.TABLE_NAME, selection, selectionArgs);
+                if (rowsDeleted != 0) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                    getContext().getContentResolver().notifyChange(ContentEntry.CONTENT_URI, null);
+                }
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

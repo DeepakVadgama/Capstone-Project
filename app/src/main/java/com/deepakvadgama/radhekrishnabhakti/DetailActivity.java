@@ -3,7 +3,6 @@ package com.deepakvadgama.radhekrishnabhakti;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +13,7 @@ import android.view.MenuItem;
  * item details are presented side-by-side with a list of items
  * in a {@link MainActivity}.
  */
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends GoogleSignInActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

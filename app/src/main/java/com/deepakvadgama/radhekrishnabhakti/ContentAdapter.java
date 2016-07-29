@@ -139,6 +139,9 @@ public class ContentAdapter extends CursorAdapter {
                 int id = (Integer) likeButton.getTag();
 
                 // Update in preferences
+                if (!PreferenceUtil.isAccountSelected.get()) {
+                    ((GoogleSignInActivity) context).selectGoogleAccount();
+                }
                 PreferenceUtil.addToFavorites(context, id);
 
                 // Update favorites table

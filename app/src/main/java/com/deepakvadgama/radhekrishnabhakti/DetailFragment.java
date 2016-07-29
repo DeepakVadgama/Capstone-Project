@@ -162,6 +162,9 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
                     String snackBarText = null;
                     if (!content.isFavorite) {
                         // Update in preferences
+                        if (!PreferenceUtil.isAccountSelected.get()) {
+                            ((GoogleSignInActivity) getActivity()).selectGoogleAccount();
+                        }
                         PreferenceUtil.addToFavorites(getActivity(), content.id);
 
                         // Update favorites table
