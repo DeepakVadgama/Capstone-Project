@@ -14,15 +14,11 @@
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="200sp"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
             android:visibility="visible"
             tools:src="@mipmap/youtube_play"/>
-
-        <!--<com.google.android.youtube.player.YouTubePlayerView-->
-        <!--android:id="@+id/youtube_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:visibility="gone"/>-->
+        <!--android:minHeight="200sp"-->
 
         <fragment
             android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"

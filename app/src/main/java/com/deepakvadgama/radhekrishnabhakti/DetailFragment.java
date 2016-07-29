@@ -1,15 +1,14 @@
 package com.deepakvadgama.radhekrishnabhakti;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -63,11 +62,7 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
             content = savedInstanceState.getParcelable(ARG_ITEM);
         }
 
-        Activity activity = this.getActivity();
-        CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-        if (appBarLayout != null) {
-            appBarLayout.setTitle(content.getTypeInTitleCase());
-        }
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(content.getTypeInTitleCase());
 
         setHasOptionsMenu(true);
     }
