@@ -81,4 +81,5 @@
     <string name="last_quote_id">last_quote_id</string>
     <string name="application_launcher_image">Application Launcher Image</string>
     <string name="pick_account">Please select account for storing Favorites</string>
+    <string name="cd_youtube_play_button">YouTube Play button</string>
 </resources>

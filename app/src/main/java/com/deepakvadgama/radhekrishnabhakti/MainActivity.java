@@ -12,6 +12,8 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +24,7 @@ import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
 import com.deepakvadgama.radhekrishnabhakti.pojo.Content;
 import com.deepakvadgama.radhekrishnabhakti.sync.ContentSyncAdapter;
 import com.deepakvadgama.radhekrishnabhakti.util.PreferenceUtil;
+import com.deepakvadgama.radhekrishnabhakti.util.TypefaceSpan;
 
 /**
  * An activity representing a list of Items. This activity
@@ -52,7 +55,14 @@ public class MainActivity extends GoogleSignInActivity implements LoaderManager.
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
+
+        SpannableString s = new SpannableString(getTitle());
+        s.setSpan(new TypefaceSpan(this, "Philosopher-Regular.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        getSupportActionBar().setTitle(s);
+
+//        TextView titleView = (TextView) findViewById(R.id.toolbar_title);
+//        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/Philosopher-Regular.ttf");
+//        titleView.setTypeface(face);
 
         // TODO: Replace later with Recycler View (complicated due lack of native support w/ CursorAdapter).
         // Initialize the adapter. Note that we pass a 'null' Cursor as the third argument. We will pass the adapter a Cursor only when the
