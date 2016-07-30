@@ -248,7 +248,7 @@ public class ContentProvider extends android.content.ContentProvider {
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 getContext().getContentResolver().notifyChange(uri, null);
-                getContext().getContentResolver().notifyChange(ContentEntry.CONTENT_URI, null);
+//                getContext().getContentResolver().notifyChange(ContentEntry.CONTENT_URI, null);
                 break;
             }
             default:
@@ -279,7 +279,7 @@ public class ContentProvider extends android.content.ContentProvider {
                         FavoritesEntry.TABLE_NAME, selection, selectionArgs);
                 if (rowsDeleted != 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
-                    getContext().getContentResolver().notifyChange(ContentEntry.CONTENT_URI, null);
+//                    getContext().getContentResolver().notifyChange(ContentEntry.CONTENT_URI, null);
                 }
                 break;
             default:

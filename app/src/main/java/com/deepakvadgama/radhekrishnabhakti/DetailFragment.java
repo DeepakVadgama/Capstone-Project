@@ -166,6 +166,7 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
                         ContentValues values = new ContentValues();
                         values.put(DatabaseContract.FavoritesEntry.COLUMN_CONTENT_ID, content.id);
                         getActivity().getContentResolver().insert(DatabaseContract.FavoritesEntry.CONTENT_URI, values);
+                        getActivity().getContentResolver().notifyChange(DatabaseContract.ContentEntry.CONTENT_URI, null);
 
                         content.isFavorite = true;
                         snackBarText = content.getTypeInTitleCase() + " added to favorites";
@@ -181,6 +182,7 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
                         getActivity().getContentResolver().delete(DatabaseContract.FavoritesEntry.CONTENT_URI,
                                 DatabaseContract.FavoritesEntry.COLUMN_CONTENT_ID + " = ? ",
                                 new String[]{String.valueOf(content.id)});
+                        getActivity().getContentResolver().notifyChange(DatabaseContract.ContentEntry.CONTENT_URI, null);
 
                         content.isFavorite = false;
                         snackBarText = content.getTypeInTitleCase() + " removed from favorites";

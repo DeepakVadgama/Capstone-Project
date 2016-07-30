@@ -166,7 +166,6 @@ public class ContentAdapter extends CursorAdapter {
                         FavoritesEntry.COLUMN_CONTENT_ID + " = ? ",
                         new String[]{String.valueOf(content.id)});
                 content.isFavorite = false;
-
             }
         });
 
