@@ -17,7 +17,7 @@
             android:scaleType="fitXY"
             android:adjustViewBounds="true"
             android:visibility="gone"
-            tools:src="@mipmap/youtube_play"/>
+            tools:src="@drawable/widget_preview"/>
 
         <fragment
             android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
@@ -25,45 +25,55 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+
         <TextView
             android:id="@+id/quote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:gravity="center_horizontal|center_vertical"
-            android:textSize="32sp"
-            android:visibility="gone"
+            android:paddingTop="@dimen/content_padding"
+            android:paddingStart="@dimen/content_padding"
+            android:paddingEnd="@dimen/content_padding"
+            android:paddingBottom="@dimen/content_padding"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="@dimen/text_primary_extra_large"
+            android:visibility="visible"
             tools:text="Work, apart from devotion or love of God, is helpless and cannot stand alone"/>
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="50dp"
-            android:padding="16dp"
-            android:textSize="21sp"
+            android:paddingStart="@dimen/content_padding"
+            android:paddingEnd="@dimen/content_padding"
+            android:paddingTop="@dimen/content_padding"
+            android:paddingBottom="@dimen/subtitle_padding_small"
+            android:textSize="@dimen/title_font_size"
             android:visibility="visible"
-            tools:text="Radhe Krishna"/>
+            android:textColor="@color/primary_text"
+            tools:text="Radhe Krishna"
+            />
 
         <TextView
             android:id="@+id/author"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="8dp"
-            android:paddingBottom="16dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textSize="16sp"
+            android:paddingStart="@dimen/content_padding"
+            android:paddingEnd="@dimen/content_padding"
+            android:textSize="@dimen/text_secondary_medium"
+            android:textColor="@color/secondary_text"
             tools:text="Swami Vivekanand"
-            android:visibility="gone"/>
+            android:visibility="visible"
+            android:gravity="start"/>
 
         <TextView
             android:id="@+id/story"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="50dp"
-            android:padding="16dp"
-            android:textSize="16sp"/>
+            android:paddingStart="@dimen/content_padding"
+            android:paddingEnd="@dimen/content_padding"
+            android:paddingBottom="@dimen/content_padding"
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/text_primary"/>
 
     </LinearLayout>
 

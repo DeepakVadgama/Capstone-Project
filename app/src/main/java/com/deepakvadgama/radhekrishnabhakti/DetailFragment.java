@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -83,14 +84,15 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
         ImageView imageView = ((ImageView) rootView.findViewById(R.id.image));
         View youTubeView = rootView.findViewById(R.id.youtube_fragment);
         TextView titleView = (TextView) rootView.findViewById(R.id.title);
-        TextView quoteView = (TextView) rootView.findViewById(R.id.quote);
         TextView authorView = (TextView) rootView.findViewById(R.id.author);
+        TextView quoteView = (TextView) rootView.findViewById(R.id.quote);
         TextView textView = (TextView) rootView.findViewById(R.id.story);
 
         final DatabaseContract.ContentType type = valueOf(content.type);
         switch (type) {
             case QUOTE:
-                titleView.setText(content.author);
+                titleView.setText("- " + content.author);
+                titleView.setGravity(Gravity.END);
                 quoteView.setText("\"" + content.text + "\"");
                 break;
             case STORY:
@@ -106,7 +108,8 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
                 break;
             case KIRTAN:
             case LECTURE:
-                titleView.setText(content.author);
+                titleView.setText(content.title);
+                authorView.setText(content.author);
                 YouTubePlayerSupportFragment youTubePlayerFragment
                         = (YouTubePlayerSupportFragment) getChildFragmentManager().findFragmentById(R.id.youtube_fragment);
                 youTubePlayerFragment.initialize(YouTubeUtil.DEVELOPER_KEY, this);

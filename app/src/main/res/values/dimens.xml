@@ -21,12 +21,17 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="card_content_margin">16dp</dimen>
     <dimen name="card_content_padding">16dp</dimen>
     <dimen name="content_padding">16dp</dimen>
+    <dimen name="subtitle_padding">16dp</dimen>
     <dimen name="title_bottom_padding">16dp</dimen>
     <dimen name="title_top_padding">16dp</dimen>
+    <dimen name="text_primary">16sp</dimen>
+    <dimen name="text_primary_large">22sp</dimen>
+    <dimen name="text_primary_extra_large">30sp</dimen>
     <dimen name="text_secondary">16sp</dimen>
     <dimen name="text_secondary_medium">18sp</dimen>
     <dimen name="text_secondary_large">22sp</dimen>
     <dimen name="like_button_dimen">50dp</dimen>
+    <dimen name="subtitle_padding_small">8dp</dimen>
 
 
 </resources>
