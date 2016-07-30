@@ -5,10 +5,10 @@
                                     xmlns:tools="http://schemas.android.com/tools"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="8dp"
+                                    android:layout_margin="@dimen/card_margin"
                                     android:descendantFocusability="blocksDescendants"
                                     card_view:cardCornerRadius="10dp"
-                                    card_view:cardElevation="5dp"
+                                    card_view:cardElevation="@dimen/card_elevation"
                                     card_view:cardUseCompatPadding="true">
 
     <LinearLayout
@@ -21,10 +21,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="3"
-            android:padding="8dp"
-            android:textColor="#222"
-            android:textSize="22sp"
-            android:textStyle="bold"
+            android:paddingBottom="@dimen/title_bottom_padding"
+            android:paddingEnd="@dimen/card_content_padding"
+            android:paddingStart="@dimen/card_content_padding"
+            android:paddingTop="@dimen/title_top_padding"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/title_font_size"
             tools:text="Krishna"/>
 
         <FrameLayout
@@ -43,12 +45,12 @@
 
             <ImageView
                 android:id="@+id/playImage"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="@dimen/youtube_button_dimen"
+                android:layout_height="@dimen/youtube_button_dimen"
                 android:layout_gravity="center_horizontal|center_vertical"
+                android:contentDescription="@string/cd_youtube_play_button"
                 android:src="@mipmap/youtube_play"
-                android:visibility="visible"
-                android:contentDescription="@string/cd_youtube_play_button"/>
+                android:visibility="visible"/>
 
         </FrameLayout>
 
@@ -58,38 +60,41 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:maxLines="3"
-            android:padding="8dp"
-            android:textColor="#666"
-            android:textSize="16sp"
-            android:visibility="gone"
-            tools:text="Somme text to display"/>
+            android:paddingBottom="@dimen/card_content_padding"
+            android:paddingEnd="@dimen/card_content_padding"
+            android:paddingStart="@dimen/card_content_padding"
+            android:paddingTop="0dp"
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/text_secondary_medium"
+            android:visibility="visible"
+            tools:text="Where can we find God if we don't see Him in our hearts and in every living being"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingEnd="@dimen/action_item_padding"
+            android:paddingStart="@dimen/action_item_padding">
 
             <com.like.LikeButton
                 android:id="@+id/save"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="8dp"
-                android:padding="8dp"
-                app:icon_size="20dp"
+                android:layout_width="@dimen/like_button_dimen"
+                android:layout_height="@dimen/like_button_dimen"
+                android:padding="@dimen/action_item_padding"
+                app:icon_size="20sp"
                 app:icon_type="heart"/>
 
             <ImageButton
                 android:id="@+id/share"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_gravity="center"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/share_button_cd"
-                android:drawablePadding="8dp"
-                android:padding="8dp"
+                android:drawablePadding="@dimen/action_item_padding"
+                android:padding="@dimen/action_item_padding"
                 android:src="@drawable/ic_share_black_24dp"
-                android:textSize="24sp"
-                android:layout_gravity="center"/>
+                android:textSize="24sp"/>
 
         </LinearLayout>
 

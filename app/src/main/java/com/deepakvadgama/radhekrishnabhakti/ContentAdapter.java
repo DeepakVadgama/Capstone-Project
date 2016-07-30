@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.CursorAdapter;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,11 +84,13 @@ public class ContentAdapter extends CursorAdapter {
         switch (type) {
             case QUOTE:
                 h.titleView.setText(content.author);
-                h.textView.setText(content.text);
+                h.textView.setText("\"" + content.text + "\"");
+                h.textView.setGravity(Gravity.CENTER);
                 break;
             case STORY:
                 h.titleView.setText(content.title);
-                h.textView.setText(content.text);
+                h.textView.setText(content.text + "... ");
+                h.textView.setGravity(Gravity.START);
                 break;
             case PICTURE:
                 h.titleView.setText(content.title);

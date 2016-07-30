@@ -17,10 +17,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:titleTextAppearance="@style/Toolbar.TitleText"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
         </android.support.v7.widget.Toolbar>
+        <!--app:titleTextAppearance="@style/Toolbar.TitleText"-->
 
     </android.support.design.widget.AppBarLayout>
 
@@ -31,6 +31,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <include layout="@layout/item_list"/>
+
     </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

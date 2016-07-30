@@ -16,9 +16,8 @@
             android:layout_height="wrap_content"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"
-            android:visibility="visible"
+            android:visibility="gone"
             tools:src="@mipmap/youtube_play"/>
-        <!--android:minHeight="200sp"-->
 
         <fragment
             android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
@@ -30,7 +29,6 @@
             android:id="@+id/quote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="200sp"
             android:padding="16dp"
             android:gravity="center_horizontal|center_vertical"
             android:textSize="32sp"

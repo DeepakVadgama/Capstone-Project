@@ -54,15 +54,13 @@ public class MainActivity extends GoogleSignInActivity implements LoaderManager.
         setContentView(R.layout.activity_item_list);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitleTextAppearance(this, R.style.Toolbar_TitleText);
         setSupportActionBar(toolbar);
 
         SpannableString s = new SpannableString(getTitle());
         s.setSpan(new TypefaceSpan(this, "Philosopher-Regular.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         getSupportActionBar().setTitle(s);
 
-//        TextView titleView = (TextView) findViewById(R.id.toolbar_title);
-//        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/Philosopher-Regular.ttf");
-//        titleView.setTypeface(face);
 
         // TODO: Replace later with Recycler View (complicated due lack of native support w/ CursorAdapter).
         // Initialize the adapter. Note that we pass a 'null' Cursor as the third argument. We will pass the adapter a Cursor only when the

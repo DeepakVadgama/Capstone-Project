@@ -61,7 +61,6 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
             content = savedInstanceState.getParcelable(ARG_ITEM);
         }
 
-//        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(content.getTypeInTitleCase());
         getActivity().setTitle(content.getTypeInTitleCase());
 
         setHasOptionsMenu(true);
@@ -92,7 +91,7 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
         switch (type) {
             case QUOTE:
                 titleView.setText(content.author);
-                quoteView.setText(content.text);
+                quoteView.setText("\"" + content.text + "\"");
                 break;
             case STORY:
                 titleView.setText(content.title);
@@ -100,6 +99,7 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
                 break;
             case PICTURE:
                 titleView.setText(content.title);
+                imageView.setContentDescription("Image of " + content.title);
                 Glide.with(getActivity())
                         .load(Uri.parse(content.url))
                         .into(imageView);
@@ -107,11 +107,9 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
             case KIRTAN:
             case LECTURE:
                 titleView.setText(content.author);
-
                 YouTubePlayerSupportFragment youTubePlayerFragment
                         = (YouTubePlayerSupportFragment) getChildFragmentManager().findFragmentById(R.id.youtube_fragment);
                 youTubePlayerFragment.initialize(YouTubeUtil.DEVELOPER_KEY, this);
-
                 break;
         }
 
@@ -202,7 +200,6 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
         if (!wasRestored) {
-//                            youTubePlayer.setFullscreen(true);
             youTubePlayer.loadVideo(YouTubeUtil.getVideoKey(content.url));
             youTubePlayer.play();
         }
@@ -215,19 +212,7 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
         inflater.inflate(R.menu.detail_fragment, menu);
-//
-//        // Retrieve the share menu item
-//        MenuItem menuItem = menu.findItem(R.id.action_share);
-//
-//        // Get the provider and hold onto it to set/change the share intent.
-//        ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
-//
-//        // Later: If using cursor, if onLoadFinished happens before this, we can go ahead and set the share intent now.
-//        if (content != null) {
-//            mShareActionProvider.setShareIntent(ShareUtil.getShareIntent(content));
-//        }
     }
 
     @Override
