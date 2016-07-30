@@ -70,8 +70,8 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
         // Set up listeners for list view pull to refresh (sync from server)
         setupPullToRefresh();
 
-        // Initialize tracker
-        AnalyticsTrackers.initialize(this);
+        // Setup analytics
+        setupTracker();
     }
 
     private void setupToolbar() {

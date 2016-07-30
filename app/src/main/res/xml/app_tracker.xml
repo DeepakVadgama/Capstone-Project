@@ -9,8 +9,30 @@
     <!--  The property id associated with this analytics tracker -->
     <string name="ga_trackingId">UA-20326133-4</string>
 
+    <bool name="ga_autoActivityTracking">true</bool>
+
     <!--
       See Project Structure -> Analytics -> Google Analytics -> Learn More
       to learn more about configuring this file.
     -->
+    <screenName name="com.deepakvadgama.radhekrishnabhakti.MainActivity">
+        Main
+    </screenName>
+    <screenName name="com.deepakvadgama.radhekrishnabhakti.SettingsActivity">
+        Settings
+    </screenName>
+    <screenName name="com.deepakvadgama.radhekrishnabhakti.DetailActivity">
+        Detail
+    </screenName>
+    <screenName name="com.deepakvadgama.radhekrishnabhakti.FavoritesActivity">
+        Favorites
+    </screenName>
+    <screenName name="com.deepakvadgama.radhekrishnabhakti.SearchActivity">
+        Search
+    </screenName>
+    <screenName name="com.deepakvadgama.radhekrishnabhakti.AboutActivity">
+        About
+    </screenName>
+
+
 </resources>

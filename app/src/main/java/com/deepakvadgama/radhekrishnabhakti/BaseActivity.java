@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.deepakvadgama.radhekrishnabhakti.sync.ContentSyncAdapter;
 import com.deepakvadgama.radhekrishnabhakti.util.ConnectionUtil;
 import com.deepakvadgama.radhekrishnabhakti.util.PreferenceUtil;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -36,6 +37,14 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
     protected ContentAdapter mContentAdapter;
     protected int mPosition = ListView.INVALID_POSITION;
     protected ListView mListView;
+    protected Tracker mTracker;
+
+    protected void setupTracker() {
+        if (!AnalyticsTrackers.isInitialized()) {
+            AnalyticsTrackers.initialize(this);
+            mTracker = AnalyticsTrackers.getInstance().get(AnalyticsTrackers.Target.APP);
+        }
+    }
 
     protected void setToolbar() {
 

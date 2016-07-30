@@ -148,7 +148,6 @@ public class ContentAdapter extends CursorAdapter {
                 PreferenceUtil.addToFavorites(context, id);
 
                 // Update favorites table
-                // TODO: Later consider doing this in background
                 ContentValues values = new ContentValues();
                 values.put(FavoritesEntry.COLUMN_CONTENT_ID, content.id);
                 context.getContentResolver().insert(FavoritesEntry.CONTENT_URI, values);
@@ -163,7 +162,6 @@ public class ContentAdapter extends CursorAdapter {
                 PreferenceUtil.removeFromFavorites(context, id);
 
                 // Update favorites table
-                // TODO: Later consider doing this in background
                 context.getContentResolver().delete(FavoritesEntry.CONTENT_URI,
                         FavoritesEntry.COLUMN_CONTENT_ID + " = ? ",
                         new String[]{String.valueOf(content.id)});

@@ -62,6 +62,7 @@ class SharePicturetask extends AsyncTask<Void, Void, File> {
         if (result == null) {
             return;
         }
+
         // glide cache uses an unfriendly & extension-less name, massage it based on the original
         String fileName = content.url.substring(content.url.lastIndexOf('/') + 1);
         File renamed = new File(result.getParent(), fileName);
