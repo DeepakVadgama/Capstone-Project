@@ -91,4 +91,5 @@
     <string name="cd_application_logo_image">Application Logo Image</string>
     <string name="about_page_image_url">https://storage.googleapis.com/radhekrishna/radha-krishna-love.jpg</string>
     <string name="menu_refresh">Refresh</string>
+    <string name="title_widget">Spiritual Quotes</string>
 </resources>

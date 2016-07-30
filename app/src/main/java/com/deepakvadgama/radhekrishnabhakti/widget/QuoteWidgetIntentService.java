@@ -15,7 +15,6 @@
  */
 package com.deepakvadgama.radhekrishnabhakti.widget;
 
-import android.annotation.TargetApi;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -23,7 +22,6 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
@@ -87,13 +85,6 @@ public class QuoteWidgetIntentService extends IntentService {
 
             RemoteViews views = new RemoteViews(getPackageName(), R.layout.quotes_widget);
 
-            // Add the data to the RemoteViews
-//            views.setImageViewResource(R.id.widget_icon, weatherArtResourceId);
-
-            // Content Descriptions for RemoteViews were only added in ICS MR1
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-                setRemoteContentDescription(views, content.text);
-            }
             views.setTextViewText(R.id.widget_description, "\"" + content.text + "\"");
             views.setTextViewText(R.id.widget_author, "- " + content.author);
 
@@ -105,11 +96,5 @@ public class QuoteWidgetIntentService extends IntentService {
             // Tell the AppWidgetManager to perform an update on the current app widget
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
-    }
-
-
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
-    private void setRemoteContentDescription(RemoteViews views, String description) {
-//        views.setContentDescription(R.id.widget_icon, description);
     }
 }
