@@ -36,7 +36,6 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     private static final String SELECTED_KEY = "selected_position";
     private static final int CONTENT_LOADER = 0;
-    private static final int REQUEST_CODE = 10;
     public static final String ARG_ITEM = "CONTENT_ITEM";
 
     @Override
@@ -44,20 +43,9 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitleTextAppearance(this, R.style.Toolbar_TitleText);
-        setSupportActionBar(toolbar);
-
-        SpannableString s = new SpannableString(getTitle());
-        s.setSpan(new TypefaceSpan(this, "Philosopher-Regular.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        getSupportActionBar().setTitle(s);
-
+        setupToolbar();
 
         // TODO: Replace later with Recycler View (complicated due lack of native support w/ CursorAdapter).
-        // Initialize the adapter. Note that we pass a 'null' Cursor as the third argument. We will pass the adapter a Cursor only when the
-        // data has finished loading for the first time (i.e. when the LoaderManager delivers the data to onLoadFinished). Also note
-        // that we have passed the '0' flag as the last argument. This prevents the adapter from registering a ContentObserver for the
-        // Cursor (the CursorLoader will do this for us!).
         mContentAdapter = new ContentAdapter(this, null, 0);
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
@@ -86,6 +74,16 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
         AnalyticsTrackers.initialize(this);
     }
 
+    private void setupToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitleTextAppearance(this, R.style.Toolbar_TitleText);
+        setSupportActionBar(toolbar);
+
+        SpannableString s = new SpannableString(getTitle());
+        s.setSpan(new TypefaceSpan(this, "Philosopher-Regular.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        getSupportActionBar().setTitle(s);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -96,10 +94,9 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(getApplicationContext(), SearchActivity.class)));
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setSubmitButtonEnabled(false);
         searchView.setQueryRefinementEnabled(false);
-        searchView.setIconifiedByDefault(true); // Do not iconify the widget; expand it by default
+        searchView.setIconifiedByDefault(true);
 
         return true;
     }
