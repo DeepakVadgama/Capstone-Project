@@ -19,6 +19,7 @@ import android.util.Log;
 import com.deepakvadgama.radhekrishnabhakti.BuildConfig;
 import com.deepakvadgama.radhekrishnabhakti.R;
 import com.deepakvadgama.radhekrishnabhakti.pojo.Content;
+import com.deepakvadgama.radhekrishnabhakti.util.AnalyticsUtil;
 import com.deepakvadgama.radhekrishnabhakti.util.NotificationUtil;
 import com.deepakvadgama.radhekrishnabhakti.util.PreferenceUtil;
 
@@ -137,7 +138,7 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
             }
         } catch (IOException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
-            // TODO: Analytics
+            AnalyticsUtil.trackSyncError();
         }
     }
 
@@ -188,6 +189,7 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
             }
         } catch (IOException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
+            AnalyticsUtil.trackSyncError();
         }
     }
 

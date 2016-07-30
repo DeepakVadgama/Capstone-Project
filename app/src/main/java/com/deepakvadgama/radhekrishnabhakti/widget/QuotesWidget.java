@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.deepakvadgama.radhekrishnabhakti.util.AnalyticsUtil;
+
 /**
  * Implementation of App Widget functionality.
  */
@@ -25,12 +27,12 @@ public class QuotesWidget extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
+        AnalyticsUtil.trackQuoteWidget("Added");
     }
 
     @Override
     public void onDisabled(Context context) {
-        // Enter relevant functionality for when the last widget is disabled
+        AnalyticsUtil.trackQuoteWidget("Added");
     }
 }
 

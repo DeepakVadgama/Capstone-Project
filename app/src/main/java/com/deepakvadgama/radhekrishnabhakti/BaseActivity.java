@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.deepakvadgama.radhekrishnabhakti.sync.ContentSyncAdapter;
+import com.deepakvadgama.radhekrishnabhakti.util.AnalyticsUtil;
 import com.deepakvadgama.radhekrishnabhakti.util.ConnectionUtil;
 import com.deepakvadgama.radhekrishnabhakti.util.PreferenceUtil;
 import com.google.android.gms.analytics.Tracker;
@@ -117,6 +118,7 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
                 emailIntent.setData(Uri.parse(getString(R.string.mail_to)));
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject));
                 startActivity(Intent.createChooser(emailIntent, "Send feedback"));
+                AnalyticsUtil.trackFeedback();
                 return true;
             case R.id.action_about:
                 startActivity(new Intent(this, AboutActivity.class));
@@ -124,6 +126,7 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
             case R.id.menu_refresh:
                 mySwipeRefreshLayout.setRefreshing(true);
                 syncData();
+                AnalyticsUtil.manualRefresh();
                 return true;
         }
         return super.onOptionsItemSelected(item);

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.deepakvadgama.radhekrishnabhakti.pojo.Content;
+import com.deepakvadgama.radhekrishnabhakti.util.AnalyticsUtil;
 import com.deepakvadgama.radhekrishnabhakti.util.PreferenceUtil;
 import com.deepakvadgama.radhekrishnabhakti.util.ShareUtil;
 import com.deepakvadgama.radhekrishnabhakti.util.YouTubeUtil;
@@ -142,9 +143,6 @@ public class ContentAdapter extends CursorAdapter {
                 int id = (Integer) likeButton.getTag();
 
                 // Update in preferences
-                if (!PreferenceUtil.isAccountSelected.get()) {
-                    ((BaseActivity) context).selectGoogleAccount();
-                }
                 PreferenceUtil.addToFavorites(context, id);
 
                 // Update favorites table
@@ -152,6 +150,8 @@ public class ContentAdapter extends CursorAdapter {
                 values.put(FavoritesEntry.COLUMN_CONTENT_ID, content.id);
                 context.getContentResolver().insert(FavoritesEntry.CONTENT_URI, values);
                 content.isFavorite = true;
+
+                AnalyticsUtil.trackFavorite(content.type);
             }
 
             @Override
@@ -166,6 +166,7 @@ public class ContentAdapter extends CursorAdapter {
                         FavoritesEntry.COLUMN_CONTENT_ID + " = ? ",
                         new String[]{String.valueOf(content.id)});
                 content.isFavorite = false;
+
             }
         });
 

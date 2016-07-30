@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
+import com.deepakvadgama.radhekrishnabhakti.util.AnalyticsUtil;
 import com.deepakvadgama.radhekrishnabhakti.util.SearchUtil;
 
 /**
@@ -65,6 +66,8 @@ public class SearchActivity extends BaseActivity implements LoaderManager.Loader
                     SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
             suggestions.saveRecentQuery(query, null);
             mQuery = SearchUtil.mapQuery(query);
+
+            AnalyticsUtil.trackSearch(mQuery);
         }
     }
 

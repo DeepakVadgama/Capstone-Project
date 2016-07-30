@@ -13,6 +13,7 @@ public class ShareUtil {
 
     public static void share(Context context, Content content) {
         final DatabaseContract.ContentType type = valueOf(content.type);
+
         if (type == PICTURE) {
             SharePicturetask sharePicturetask = new SharePicturetask(context, content);
             sharePicturetask.execute();
@@ -20,6 +21,8 @@ public class ShareUtil {
             Intent shareIntent = getShareIntent(content);
             context.startActivity(Intent.createChooser(shareIntent, "Share " + content.getTypeInTitleCase()));
         }
+
+        AnalyticsUtil.trackShare(type);
     }
 
     public static Intent getShareIntent(Content content) {

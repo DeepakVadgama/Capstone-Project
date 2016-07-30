@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
 import com.deepakvadgama.radhekrishnabhakti.pojo.Content;
+import com.deepakvadgama.radhekrishnabhakti.util.AnalyticsUtil;
 import com.deepakvadgama.radhekrishnabhakti.util.PreferenceUtil;
 import com.deepakvadgama.radhekrishnabhakti.util.ShareUtil;
 import com.deepakvadgama.radhekrishnabhakti.util.YouTubeUtil;
@@ -157,10 +158,8 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
 
                     String snackBarText = null;
                     if (!content.isFavorite) {
+
                         // Update in preferences
-                        if (!PreferenceUtil.isAccountSelected.get()) {
-                            ((BaseActivity) getActivity()).selectGoogleAccount();
-                        }
                         PreferenceUtil.addToFavorites(getActivity(), content.id);
 
                         // Update favorites table
@@ -171,6 +170,8 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
                         content.isFavorite = true;
                         snackBarText = content.getTypeInTitleCase() + " added to favorites";
                         ((FloatingActionButton) view).setImageDrawable(getDrawable());
+
+                        AnalyticsUtil.trackFavorite(content.type);
 
                     } else {
                         // Update in preferences

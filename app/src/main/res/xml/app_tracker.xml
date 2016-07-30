@@ -11,6 +11,8 @@
 
     <bool name="ga_autoActivityTracking">true</bool>
 
+    <bool name="ga_reportUncaughtExceptions">true</bool>
+
     <!--
       See Project Structure -> Analytics -> Google Analytics -> Learn More
       to learn more about configuring this file.

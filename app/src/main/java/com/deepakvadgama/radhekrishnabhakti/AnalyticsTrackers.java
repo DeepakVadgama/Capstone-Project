@@ -47,6 +47,13 @@ public final class AnalyticsTrackers {
         return sInstance;
     }
 
+    public static Tracker getDefaultTracker() {
+        if (sInstance != null) {
+            return sInstance.get(Target.APP);
+        }
+        return null;
+    }
+
     private final Map<Target, Tracker> mTrackers = new HashMap<Target, Tracker>();
     private final Context mContext;
 
