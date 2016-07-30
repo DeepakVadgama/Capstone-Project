@@ -85,6 +85,8 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
         if (!PreferenceUtil.isAccountSelected.get()) {
             selectGoogleAccount();
         }
+
+        setupPullToRefresh();
     }
 
     @Override

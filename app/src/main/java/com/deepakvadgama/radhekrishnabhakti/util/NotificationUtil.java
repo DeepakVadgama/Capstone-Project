@@ -62,7 +62,7 @@ public class NotificationUtil {
                 }
 
                 Notification.Builder mBuilder = new Notification.Builder(context);
-                mBuilder.setSmallIcon(R.drawable.ic_favorite_white_24dp) // Change later
+                mBuilder.setSmallIcon(R.drawable.feather_white)
                         .setContentTitle(title)
                         .setContentText(contentText);
 
@@ -156,7 +156,7 @@ public class NotificationUtil {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
             Notification.Builder mBuilder = new Notification.Builder(context);
-            mBuilder.setSmallIcon(R.drawable.ic_favorite_white_24dp) // Change later
+            mBuilder.setSmallIcon(R.drawable.feather_white)
                     .setContentTitle(title);
 
             String ringTone = prefs.getString(context.getString(R.string.notifications_ringtone), null);

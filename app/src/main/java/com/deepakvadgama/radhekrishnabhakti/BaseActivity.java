@@ -2,12 +2,14 @@ package com.deepakvadgama.radhekrishnabhakti;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.deepakvadgama.radhekrishnabhakti.sync.ContentSyncAdapter;
 import com.deepakvadgama.radhekrishnabhakti.util.PreferenceUtil;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -24,12 +26,13 @@ import com.google.android.gms.common.api.GoogleApiClient;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class BaseActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class BaseActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, SwipeRefreshLayout.OnRefreshListener {
 
     public final String LOG_TAG = BaseActivity.class.getSimpleName();
 
     private GoogleApiClient mGoogleApiClient;
     private static final int REQUEST_CODE = 10;
+    private SwipeRefreshLayout mySwipeRefreshLayout;
 
     protected void setToolbar() {
 
@@ -44,6 +47,12 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
         }
     }
 
+    protected void setupPullToRefresh() {
+        mySwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
+        if (mySwipeRefreshLayout != null) {
+            mySwipeRefreshLayout.setOnRefreshListener(this);
+        }
+    }
 
     protected void selectGoogleAccount() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -90,17 +99,31 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_feedback) {
-            Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-            emailIntent.setData(Uri.parse(getString(R.string.mail_to)));
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject));
-            startActivity(Intent.createChooser(emailIntent, "Send feedback"));
-            return true;
-        }
-        if (id == R.id.action_about) {
-            startActivity(new Intent(this, AboutActivity.class));
-            return true;
+        switch (id) {
+            case R.id.action_feedback:
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                emailIntent.setData(Uri.parse(getString(R.string.mail_to)));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject));
+                startActivity(Intent.createChooser(emailIntent, "Send feedback"));
+                return true;
+            case R.id.action_about:
+                startActivity(new Intent(this, AboutActivity.class));
+                return true;
+            case R.id.menu_refresh:
+                mySwipeRefreshLayout.setRefreshing(true);
+                syncData();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void syncData() {
+        ContentSyncAdapter.syncImmediately(this);
+        mySwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onRefresh() {
+        syncData();
     }
 }

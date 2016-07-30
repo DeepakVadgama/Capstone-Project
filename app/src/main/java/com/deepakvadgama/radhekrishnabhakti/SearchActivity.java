@@ -57,6 +57,8 @@ public class SearchActivity extends BaseActivity implements LoaderManager.Loader
 
         // Main Sauce - Here loader is created if not present, or already created loader is reused.
         getSupportLoaderManager().initLoader(CONTENT_LOADER, null, this);
+
+        setupPullToRefresh();
     }
 
     @Override

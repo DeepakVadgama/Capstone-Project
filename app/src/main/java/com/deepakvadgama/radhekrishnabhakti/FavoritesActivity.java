@@ -51,6 +51,8 @@ public class FavoritesActivity extends BaseActivity implements LoaderManager.Loa
 
         // Main Sauce - Here loader is created if not present, or already created loader is reused.
         getSupportLoaderManager().initLoader(CONTENT_LOADER, null, this);
+
+        setupPullToRefresh();
     }
 
 
