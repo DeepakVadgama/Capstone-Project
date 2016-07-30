@@ -82,4 +82,12 @@
     <string name="application_launcher_image">Application Launcher Image</string>
     <string name="pick_account">Please select account for storing Favorites</string>
     <string name="cd_youtube_play_button">YouTube Play button</string>
+    <string name="action_feedback">Feedback</string>
+    <string name="action_about">About</string>
+    <string name="title_activity_about">About</string>
+    <string name="mail_to">mailto: neo.1260+radhe-feedback@gmail.com</string>
+    <string name="email_subject">Radhe Android App Feedback</string>
+    <string name="about_us_info">This app is for all people who want to progress spiritually by doing bhakti (devotion) to Radhe Krishna. \n\nAll saints have given a single message of loving God. But attaching the mind to the Divine is difficult. We are always busy and stressed in this material world performing our duties and the knowledge of this spiritual path is dispersed and sometimes confusing. This app will provide you with clear understanding of path of love. It will help you increase your attachment to God by telling you about God’s engrossing tales known as leelas. It will inspire you with quotes of saints and will help you practice devotion by participating in chantings.</string>
+    <string name="cd_application_logo_image">Application Logo Image</string>
+    <string name="about_page_image_url">https://storage.googleapis.com/radhekrishna/radha-krishna-love.jpg</string>
 </resources>

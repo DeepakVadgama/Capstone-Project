@@ -2,8 +2,11 @@ package com.deepakvadgama.radhekrishnabhakti;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.deepakvadgama.radhekrishnabhakti.util.PreferenceUtil;
 import com.google.android.gms.auth.api.Auth;
@@ -21,12 +24,26 @@ import com.google.android.gms.common.api.GoogleApiClient;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class GoogleSignInActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class BaseActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
-    public final String LOG_TAG = GoogleSignInActivity.class.getSimpleName();
+    public final String LOG_TAG = BaseActivity.class.getSimpleName();
 
     private GoogleApiClient mGoogleApiClient;
     private static final int REQUEST_CODE = 10;
+
+    protected void setToolbar() {
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle(getTitle());
+
+        // Show the Up button in the action bar.
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
 
     protected void selectGoogleAccount() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -68,5 +85,22 @@ public class GoogleSignInActivity extends AppCompatActivity implements GoogleApi
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.e(LOG_TAG, "Failed to connect to Google");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_feedback) {
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+            emailIntent.setData(Uri.parse(getString(R.string.mail_to)));
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject));
+            startActivity(Intent.createChooser(emailIntent, "Send feedback"));
+            return true;
+        }
+        if (id == R.id.action_about) {
+            startActivity(new Intent(this, AboutActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -20,6 +20,7 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="card_elevation">4dp</dimen>
     <dimen name="card_content_margin">16dp</dimen>
     <dimen name="card_content_padding">16dp</dimen>
+    <dimen name="content_padding">16dp</dimen>
     <dimen name="title_bottom_padding">16dp</dimen>
     <dimen name="title_top_padding">16dp</dimen>
     <dimen name="text_secondary">16sp</dimen>

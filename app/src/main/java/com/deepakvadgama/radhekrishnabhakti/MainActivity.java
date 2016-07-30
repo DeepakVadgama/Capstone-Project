@@ -34,7 +34,7 @@ import com.deepakvadgama.radhekrishnabhakti.util.TypefaceSpan;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class MainActivity extends GoogleSignInActivity implements LoaderManager.LoaderCallbacks<Cursor>,
+public class MainActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>,
         AdapterView.OnItemClickListener {
 
     public final String LOG_TAG = MainActivity.class.getSimpleName();

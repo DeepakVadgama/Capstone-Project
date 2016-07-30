@@ -156,7 +156,7 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
                     if (!content.isFavorite) {
                         // Update in preferences
                         if (!PreferenceUtil.isAccountSelected.get()) {
-                            ((GoogleSignInActivity) getActivity()).selectGoogleAccount();
+                            ((BaseActivity) getActivity()).selectGoogleAccount();
                         }
                         PreferenceUtil.addToFavorites(getActivity(), content.id);
 

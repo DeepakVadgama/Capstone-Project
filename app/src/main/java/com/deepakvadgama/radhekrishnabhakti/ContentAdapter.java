@@ -89,7 +89,7 @@ public class ContentAdapter extends CursorAdapter {
                 break;
             case STORY:
                 h.titleView.setText(content.title);
-                h.textView.setText(content.text + "... ");
+                h.textView.setText(content.text);
                 h.textView.setGravity(Gravity.START);
                 break;
             case PICTURE:
@@ -143,7 +143,7 @@ public class ContentAdapter extends CursorAdapter {
 
                 // Update in preferences
                 if (!PreferenceUtil.isAccountSelected.get()) {
-                    ((GoogleSignInActivity) context).selectGoogleAccount();
+                    ((BaseActivity) context).selectGoogleAccount();
                 }
                 PreferenceUtil.addToFavorites(context, id);
 

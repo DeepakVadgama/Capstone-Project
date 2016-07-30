@@ -2,8 +2,6 @@ package com.deepakvadgama.radhekrishnabhakti;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -13,20 +11,14 @@ import android.view.MenuItem;
  * item details are presented side-by-side with a list of items
  * in a {@link MainActivity}.
  */
-public class DetailActivity extends GoogleSignInActivity {
+public class DetailActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        setToolbar();
 
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity using a fragment transaction.
@@ -55,6 +47,7 @@ public class DetailActivity extends GoogleSignInActivity {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 

@@ -20,7 +20,6 @@
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
         </android.support.v7.widget.Toolbar>
-        <!--app:titleTextAppearance="@style/Toolbar.TitleText"-->
 
     </android.support.design.widget.AppBarLayout>
 
