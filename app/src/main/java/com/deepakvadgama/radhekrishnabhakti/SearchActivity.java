@@ -25,9 +25,6 @@ public class SearchActivity extends BaseActivity implements LoaderManager.Loader
 
     private static final String SELECTED_KEY = "selected_position";
     private static final int CONTENT_LOADER = 2;
-    private ContentAdapter mContentAdapter;
-    private int mPosition = ListView.INVALID_POSITION;
-    private ListView mListView;
     private String mQuery;
 
     @Override
@@ -99,6 +96,7 @@ public class SearchActivity extends BaseActivity implements LoaderManager.Loader
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
+        showProgressBar();
         // Since activity uses only 1 loader, we are not using id/LOADER_ID
         return new CursorLoader(this,
                 DatabaseContract.ContentEntry.buildContentSearchWithAny(mQuery),
@@ -110,10 +108,7 @@ public class SearchActivity extends BaseActivity implements LoaderManager.Loader
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        mContentAdapter.swapCursor(cursor);
-        if (mPosition != ListView.INVALID_POSITION) {
-            mListView.smoothScrollToPosition(mPosition);
-        }
+        super.onLoadFinished(loader, cursor);
     }
 
     @Override

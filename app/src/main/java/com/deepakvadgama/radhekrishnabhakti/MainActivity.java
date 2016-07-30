@@ -38,10 +38,6 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
     private static final int CONTENT_LOADER = 0;
     private static final int REQUEST_CODE = 10;
     public static final String ARG_ITEM = "CONTENT_ITEM";
-    private ContentAdapter mContentAdapter;
-    private LoaderManager.LoaderCallbacks<Cursor> mCallbacks;
-    private int mPosition = ListView.INVALID_POSITION;
-    private ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +140,8 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
+        showProgressBar();
+
         // Since activity uses only 1 loader, we are not using id/LOADER_ID
         return new CursorLoader(this,
                 DatabaseContract.ContentEntry.CONTENT_URI,
@@ -153,12 +151,10 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
                 null);
     }
 
+
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        mContentAdapter.swapCursor(cursor);
-        if (mPosition != ListView.INVALID_POSITION) {
-            mListView.smoothScrollToPosition(mPosition);
-        }
+        super.onLoadFinished(loader, cursor);
 
         // If Activity is triggered from Notification or Widget, open details screen.
         if (getIntent().getParcelableExtra(ARG_ITEM) != null) {

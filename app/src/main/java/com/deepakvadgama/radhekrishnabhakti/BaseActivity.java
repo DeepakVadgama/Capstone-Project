@@ -1,15 +1,22 @@
 package com.deepakvadgama.radhekrishnabhakti;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.deepakvadgama.radhekrishnabhakti.sync.ContentSyncAdapter;
+import com.deepakvadgama.radhekrishnabhakti.util.ConnectionUtil;
 import com.deepakvadgama.radhekrishnabhakti.util.PreferenceUtil;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -25,6 +32,9 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
     private GoogleApiClient mGoogleApiClient;
     private static final int REQUEST_CODE = 10;
     private SwipeRefreshLayout mySwipeRefreshLayout;
+    protected ContentAdapter mContentAdapter;
+    protected int mPosition = ListView.INVALID_POSITION;
+    protected ListView mListView;
 
     protected void setToolbar() {
 
@@ -112,10 +122,49 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
     private void syncData() {
         ContentSyncAdapter.syncImmediately(this);
         mySwipeRefreshLayout.setRefreshing(false);
+        updateEmptyView();
     }
 
     @Override
     public void onRefresh() {
         syncData();
+    }
+
+    protected void updateEmptyView() {
+        TextView tv = (TextView) findViewById(R.id.empty_list_view_text);
+        View view = findViewById(R.id.empty_list_view);
+        if (mContentAdapter.getCount() == 0) {
+            if (this instanceof FavoritesActivity) {
+                tv.setText(R.string.no_favorites_string);
+            } else if (this instanceof SearchActivity) {
+                tv.setText(R.string.no_search_results_string);
+            } else if (this instanceof MainActivity && !ConnectionUtil.isNetworkAvailable(this)) {
+                tv.setText(R.string.internet_not_working_string);
+            } else if (this instanceof MainActivity) {
+                tv.setText(R.string.connection_to_server_failed_string);
+            }
+            view.setVisibility(View.VISIBLE);
+        } else {
+            view.setVisibility(View.GONE);
+        }
+    }
+
+    protected void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        stopProgressBar();
+        mContentAdapter.swapCursor(cursor);
+        if (mPosition != ListView.INVALID_POSITION) {
+            mListView.smoothScrollToPosition(mPosition);
+        }
+        updateEmptyView();
+    }
+
+    protected void showProgressBar() {
+        ProgressBar pb = (ProgressBar) findViewById(R.id.progress_bar);
+        pb.setVisibility(ProgressBar.VISIBLE);
+    }
+
+    protected void stopProgressBar() {
+        ProgressBar pb = (ProgressBar) findViewById(R.id.progress_bar);
+        pb.setVisibility(ProgressBar.GONE);
     }
 }

@@ -92,4 +92,10 @@
     <string name="about_page_image_url">https://storage.googleapis.com/radhekrishna/radha-krishna-love.jpg</string>
     <string name="menu_refresh">Refresh</string>
     <string name="title_widget">Spiritual Quotes</string>
+    <string name="empty_list">No items found</string>
+    <string name="no_favorites_string">"No Favorites added yet. "</string>
+    <string name="no_search_results_string">No Search results found. \nTry with a different query (eg: Quotes).</string>
+    <string name="internet_not_working_string">Internet not working. \nPlease check your connection and try again</string>
+    <string name="connection_to_server_failed_string">Unable to fetch data. \nPlease try again later.</string>
+    <string name="cd_alert_image">Alert Image</string>
 </resources>

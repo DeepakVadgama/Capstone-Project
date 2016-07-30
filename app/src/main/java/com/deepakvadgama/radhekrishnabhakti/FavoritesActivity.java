@@ -23,9 +23,6 @@ public class FavoritesActivity extends BaseActivity implements LoaderManager.Loa
 
     private static final String SELECTED_KEY = "selected_position";
     private static final int CONTENT_LOADER = 1;
-    private ContentAdapter mContentAdapter;
-    private int mPosition = ListView.INVALID_POSITION;
-    private ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +75,7 @@ public class FavoritesActivity extends BaseActivity implements LoaderManager.Loa
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
+        showProgressBar();
         // Since activity uses only 1 loader, we are not using id/LOADER_ID
         return new CursorLoader(this,
                 DatabaseContract.ContentEntry.CONTENT_URI,
@@ -89,10 +87,7 @@ public class FavoritesActivity extends BaseActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        mContentAdapter.swapCursor(cursor);
-        if (mPosition != ListView.INVALID_POSITION) {
-            mListView.smoothScrollToPosition(mPosition);
-        }
+        super.onLoadFinished(loader, cursor);
     }
 
     @Override
