@@ -3,6 +3,7 @@ package com.deepakvadgama.radhekrishnabhakti;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -122,7 +123,11 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
     private void syncData() {
         ContentSyncAdapter.syncImmediately(this);
         mySwipeRefreshLayout.setRefreshing(false);
-        updateEmptyView();
+        if (!ConnectionUtil.isNetworkAvailable(this)) {
+            Snackbar.make(mListView, R.string.internet_not_working_string, Snackbar.LENGTH_LONG).show();
+        } else {
+            updateEmptyView();
+        }
     }
 
     @Override
