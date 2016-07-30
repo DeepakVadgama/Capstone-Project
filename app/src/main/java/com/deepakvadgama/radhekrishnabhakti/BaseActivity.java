@@ -18,14 +18,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-/**
- * An activity representing a list of Items. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link DetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
 public class BaseActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, SwipeRefreshLayout.OnRefreshListener {
 
     public final String LOG_TAG = BaseActivity.class.getSimpleName();

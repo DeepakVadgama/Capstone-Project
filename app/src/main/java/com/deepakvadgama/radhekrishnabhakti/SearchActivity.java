@@ -17,12 +17,7 @@ import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
 import com.deepakvadgama.radhekrishnabhakti.util.SearchUtil;
 
 /**
- * An activity representing a list of Items. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link DetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
+ * Activity to perform search and display results
  */
 public class SearchActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
 

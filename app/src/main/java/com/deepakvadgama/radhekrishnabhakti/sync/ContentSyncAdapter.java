@@ -56,9 +56,6 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
 //        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        // add your other interceptors …
-
-        // add logging as last interceptor
 //        httpClient.addInterceptor(logging);  // For testing
 
         Retrofit mRetrofit = new Retrofit.Builder()

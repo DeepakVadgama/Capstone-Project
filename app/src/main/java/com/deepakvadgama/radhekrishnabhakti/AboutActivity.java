@@ -6,6 +6,9 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
+/**
+ * Activity to display static content about the app
+ */
 public class AboutActivity extends BaseActivity {
 
     public final String LOG_TAG = AboutActivity.class.getSimpleName();

@@ -15,12 +15,7 @@ import com.deepakvadgama.radhekrishnabhakti.data.ContentProvider;
 import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
 
 /**
- * An activity representing a list of Items. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link DetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
+ * Activity to display list of favorites
  */
 public class FavoritesActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
 
