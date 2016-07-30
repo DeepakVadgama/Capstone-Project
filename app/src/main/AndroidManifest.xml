@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.deepakvadgama.radhekrishnabhakti"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.deepakvadgama.radhekrishnabhakti">
 
     <!-- This permission is necessary in order to perform network access. -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -9,7 +9,8 @@
     <!-- Permissions required by the sync adapter -->
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/> <!-- Required -->
+
 
     <!-- Get account to store favorites on server -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
@@ -32,6 +33,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -55,6 +57,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable"/>
@@ -115,10 +118,9 @@
                 android:resource="@xml/syncadapter"/>
         </service>
 
-
         <receiver
-            android:label="@string/title_widget"
-            android:name=".widget.QuotesWidget">
+            android:name=".widget.QuotesWidget"
+            android:label="@string/title_widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
@@ -127,7 +129,12 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/quotes_widget_info"/>
         </receiver>
+
         <service android:name=".widget.QuoteWidgetIntentService"/>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
     </application>
 
 </manifest>

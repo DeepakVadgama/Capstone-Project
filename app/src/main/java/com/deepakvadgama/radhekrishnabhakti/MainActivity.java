@@ -68,16 +68,22 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
         mListView.setAdapter(mContentAdapter);
         mListView.setOnItemClickListener(this);
 
-        // Main Sauce - Here loader is created if not present, or already created loader is reused.
+        // Init loader.. its created if not present, or already created loader is reused (on device rotation etc).
         getSupportLoaderManager().initLoader(CONTENT_LOADER, null, this);
 
+        // Initialize sync adapter to sync content with server
         ContentSyncAdapter.initializeSyncAdapter(this);
 
+        // Ask user for Google account, to sync existing favorites from server.
         if (!PreferenceUtil.isAccountSelected.get()) {
             selectGoogleAccount();
         }
 
+        // Set up listeners for list view pull to refresh (sync from server)
         setupPullToRefresh();
+
+        // Initialize tracker
+        AnalyticsTrackers.initialize(this);
     }
 
     @Override
