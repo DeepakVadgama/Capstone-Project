@@ -29,6 +29,7 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+        buildConfigField "String", "SERVER_ADDRESS", "\"http://104.199.165.151:8080\""
     }
     productFlavors {
         dev {
@@ -45,12 +46,9 @@ android {
     }
     buildTypes {
         debug {
-            // Once server is on cloud, move this to defaultConfig
-            buildConfigField "String", "SERVER_ADDRESS", "\"http://192.168.0.247:8080\""
+//            buildConfigField "String", "SERVER_ADDRESS", "\"http://192.168.0.247:8080\""
         }
         release {
-            // Once server is on cloud, move this to defaultConfig
-            buildConfigField "String", "SERVER_ADDRESS", "\"http://192.168.0.247:8080\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
