@@ -1,6 +1,5 @@
 package com.deepakvadgama.radhekrishnabhakti;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,16 +36,17 @@ public class DetailActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            finish();
-            return true;
-        }
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            return true;
-        }
+//        int id = item.getItemId();
+//        if (id == android.R.id.home) {
+//            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
+//            finish();
+//            overridePendingTransition(R.transition.left_out, R.transition.right_in);
+//            return true;
+//        }
+//        if (id == R.id.action_settings) {
+//            startActivity(new Intent(this, SettingsActivity.class));
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }

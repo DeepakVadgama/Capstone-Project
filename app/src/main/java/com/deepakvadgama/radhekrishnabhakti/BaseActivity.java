@@ -3,6 +3,8 @@ package com.deepakvadgama.radhekrishnabhakti;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,10 +31,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-public class BaseActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, SwipeRefreshLayout.OnRefreshListener {
+public class BaseActivity extends AppCompatActivity implements
+        GoogleApiClient.OnConnectionFailedListener,
+        SwipeRefreshLayout.OnRefreshListener,
+        AdapterView.OnItemClickListener {
 
     public final String LOG_TAG = BaseActivity.class.getSimpleName();
 
+    protected static final String SELECTED_KEY = "selected_position";
     private GoogleApiClient mGoogleApiClient;
     private static final int REQUEST_CODE = 10;
     private SwipeRefreshLayout mySwipeRefreshLayout;
@@ -44,6 +51,32 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
         if (!AnalyticsTrackers.isInitialized()) {
             AnalyticsTrackers.initialize(this);
             mTracker = AnalyticsTrackers.getInstance().get(AnalyticsTrackers.Target.APP);
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        mPosition = position;
+
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(DetailFragment.ARG_ITEM, (Parcelable) view.getTag(R.id.contentTag));
+        startActivity(intent);
+        overridePendingTransition(R.transition.right_in, R.transition.left_out);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if (mPosition != ListView.INVALID_POSITION) {
+            outState.putInt(SELECTED_KEY, mPosition);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
+            mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
     }
 
@@ -122,11 +155,20 @@ public class BaseActivity extends AppCompatActivity implements GoogleApiClient.O
                 return true;
             case R.id.action_about:
                 startActivity(new Intent(this, AboutActivity.class));
+                overridePendingTransition(R.transition.right_in, R.transition.left_out);
                 return true;
             case R.id.menu_refresh:
                 mySwipeRefreshLayout.setRefreshing(true);
                 syncData();
                 AnalyticsUtil.manualRefresh();
+                return true;
+            case android.R.id.home:
+                finish();
+                overridePendingTransition(R.transition.left_in, R.transition.right_out);
+                return true;
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                overridePendingTransition(R.transition.right_in, R.transition.left_out);
                 return true;
         }
         return super.onOptionsItemSelected(item);

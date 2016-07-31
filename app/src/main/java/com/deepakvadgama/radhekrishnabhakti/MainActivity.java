@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -16,8 +15,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.deepakvadgama.radhekrishnabhakti.data.DatabaseContract;
@@ -29,12 +26,10 @@ import com.deepakvadgama.radhekrishnabhakti.util.TypefaceSpan;
 /**
  * Main Activity which displays list of items
  */
-public class MainActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>,
-        AdapterView.OnItemClickListener {
+public class MainActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    private static final String SELECTED_KEY = "selected_position";
     private static final int CONTENT_LOADER = 0;
     public static final String ARG_ITEM = "CONTENT_ITEM";
 
@@ -106,38 +101,10 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
         int id = item.getItemId();
         if (id == R.id.action_go_to_favorites) {
             startActivity(new Intent(this, FavoritesActivity.class));
-            return true;
-        }
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
+            overridePendingTransition(R.transition.right_in, R.transition.left_out);
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        mPosition = position;
-
-        Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra(DetailFragment.ARG_ITEM, (Parcelable) view.getTag(R.id.contentTag));
-        startActivity(intent);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        if (mPosition != ListView.INVALID_POSITION) {
-            outState.putInt(SELECTED_KEY, mPosition);
-        }
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
-            mPosition = savedInstanceState.getInt(SELECTED_KEY);
-        }
     }
 
     @Override
