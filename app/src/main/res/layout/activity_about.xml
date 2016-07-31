@@ -40,6 +40,7 @@
                 android:id="@+id/about_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusable="true"
                 android:contentDescription="@string/cd_application_logo_image"
                 android:padding="@dimen/content_padding"
                 android:scaleType="fitXY"/>
@@ -47,6 +48,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusable="true"
                 android:paddingBottom="@dimen/content_padding"
                 android:paddingEnd="@dimen/content_padding"
                 android:paddingLeft="@dimen/content_padding"
