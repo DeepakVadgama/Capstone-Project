@@ -157,6 +157,7 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
                 public void onClick(View view) {
 
                     String snackBarText = null;
+                    final FloatingActionButton fab = (FloatingActionButton) view;
                     if (!content.isFavorite) {
 
                         // Update in preferences
@@ -170,7 +171,8 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
 
                         content.isFavorite = true;
                         snackBarText = content.getTypeInTitleCase() + " added to favorites";
-                        ((FloatingActionButton) view).setImageDrawable(getDrawable());
+                        fab.setImageDrawable(getDrawable());
+                        fab.setContentDescription(getString(R.string.cd_unlike_button));
 
                         AnalyticsUtil.trackFavorite(content.type);
 
@@ -186,7 +188,8 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
 
                         content.isFavorite = false;
                         snackBarText = content.getTypeInTitleCase() + " removed from favorites";
-                        ((FloatingActionButton) view).setImageDrawable(getDrawable());
+                        fab.setImageDrawable(getDrawable());
+                        fab.setContentDescription(getString(R.string.cd_like_button));
                     }
 
                     Snackbar.make(view, snackBarText, Snackbar.LENGTH_LONG).show();

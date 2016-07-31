@@ -81,6 +81,7 @@
                 android:layout_width="@dimen/like_button_dimen"
                 android:layout_height="@dimen/like_button_dimen"
                 android:padding="@dimen/action_item_padding"
+                android:contentDescription="@string/cd_like_button"
                 app:icon_size="20sp"
                 app:icon_type="heart"/>
 
