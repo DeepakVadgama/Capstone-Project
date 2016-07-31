@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="title_font_size">26sp</dimen>
+    <dimen name="text_primary">18sp</dimen>
+    <dimen name="text_primary_large">26sp</dimen>
+    <dimen name="text_primary_extra_large">36sp</dimen>
+    <dimen name="text_secondary">18sp</dimen>
+    <dimen name="text_secondary_medium">22sp</dimen>
+    <dimen name="text_secondary_large">26sp</dimen>
+</resources>
