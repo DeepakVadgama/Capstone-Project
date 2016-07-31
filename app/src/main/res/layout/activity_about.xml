@@ -40,18 +40,20 @@
                 android:id="@+id/about_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/cd_application_logo_image"
                 android:padding="@dimen/content_padding"
-                android:scaleType="fitXY"
-                android:contentDescription="@string/cd_application_logo_image"/>
+                android:scaleType="fitXY"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="@dimen/content_padding"
-                android:paddingEnd="@dimen/content_padding"
                 android:paddingBottom="@dimen/content_padding"
-                android:textSize="@dimen/text_secondary"
-                android:text="@string/about_us_info"/>
+                android:paddingEnd="@dimen/content_padding"
+                android:paddingLeft="@dimen/content_padding"
+                android:paddingRight="@dimen/content_padding"
+                android:paddingStart="@dimen/content_padding"
+                android:text="@string/about_us_info"
+                android:textSize="@dimen/text_secondary"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
