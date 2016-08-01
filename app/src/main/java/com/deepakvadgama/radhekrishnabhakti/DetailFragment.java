@@ -102,7 +102,7 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
                 break;
             case PICTURE:
                 titleView.setText(content.title);
-                imageView.setContentDescription("Image of " + content.title);
+                imageView.setContentDescription(getActivity().getString(R.string.image_of) + content.title);
                 Glide.with(getActivity())
                         .load(Uri.parse(content.url))
                         .into(imageView);
@@ -170,7 +170,7 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
                         getActivity().getContentResolver().notifyChange(DatabaseContract.ContentEntry.CONTENT_URI, null);
 
                         content.isFavorite = true;
-                        snackBarText = content.getTypeInTitleCase() + " added to favorites";
+                        snackBarText = content.getTypeInTitleCase() + getActivity().getString(R.string.added_to_favorites);
                         fab.setImageDrawable(getDrawable());
                         fab.setContentDescription(getString(R.string.cd_unlike_button));
 
@@ -187,7 +187,7 @@ public class DetailFragment extends Fragment implements YouTubePlayer.OnInitiali
                         getActivity().getContentResolver().notifyChange(DatabaseContract.ContentEntry.CONTENT_URI, null);
 
                         content.isFavorite = false;
-                        snackBarText = content.getTypeInTitleCase() + " removed from favorites";
+                        snackBarText = content.getTypeInTitleCase() + getActivity().getString(R.string.removed_from_favorites);
                         fab.setImageDrawable(getDrawable());
                         fab.setContentDescription(getString(R.string.cd_like_button));
                     }
