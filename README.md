@@ -41,6 +41,3 @@ Ability to use Google account to synchronize favorites across devices.
 Ability to Share content.
 Widget functionality that shows Quotes (updated daily).
 Notifications. 
-
-## Usage
-
