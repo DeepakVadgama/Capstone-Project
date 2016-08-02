@@ -34,10 +34,10 @@ Everyone who is inclined towards spiritual path and want to know more about Radh
 
 ## Features
 
-Stream of photos, quotes, videos (YouTube only), stories. 
-Ability to search for specific content based on author, title and type.
-Ability to save favorite content.
-Ability to use Google account to synchronize favorites across devices.
-Ability to Share content.
-Widget functionality that shows Quotes (updated daily).
-Notifications. 
+- Stream of photos, quotes, videos (YouTube only), stories. 
+- Ability to search for specific content based on author, title and type.
+- Ability to save favorite content.
+- Ability to use Google account to synchronize favorites across devices.
+- Ability to Share content.
+- Widget functionality that shows Quotes (updated daily).
+- Notifications. 
