@@ -60,6 +60,7 @@ public class PreferenceUtil {
         final Set<String> stringSet = prefs.getStringSet(context.getString(R.string.pref_favorites_added), new HashSet<String>());
         stringSet.add(String.valueOf(id));
         editor.putStringSet(context.getString(R.string.pref_favorites_added), stringSet);
+        editor.putBoolean(context.getString(R.string.pref_favorites_updated), true);
         editor.apply();
     }
 
@@ -71,6 +72,7 @@ public class PreferenceUtil {
         stringSet.remove(
                 String.valueOf(id));
         editor.putStringSet(context.getString(R.string.pref_favorites_added), stringSet);
+        editor.putBoolean(context.getString(R.string.pref_favorites_updated), true);
         editor.apply();
     }
 }

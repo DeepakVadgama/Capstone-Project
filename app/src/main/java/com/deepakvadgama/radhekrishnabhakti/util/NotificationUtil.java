@@ -40,7 +40,7 @@ public class NotificationUtil {
             long lastSync = prefs.getLong(context.getString(R.string.pref_last_notification), 0);
 
             //checking the last update and notify if it' the first of the day
-            if (System.currentTimeMillis() - lastSync >= FOUR_HOURS) {
+            if (System.currentTimeMillis() - lastSync >= 0) {
 
                 String title = "";
                 String contentText = "";

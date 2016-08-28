@@ -24,7 +24,6 @@ public interface RetrofitService {
     @POST("/api/favorites/remove")
     Call<Boolean> removeFavorite(@Query("email") String email, @Query("contentId") int contentId);
 
-
     @POST("/api/favorites/addSet")
     Call<Boolean> addFavorites(@Query("email") String email, @Query("contentIds") Set<String> contentIds);
 

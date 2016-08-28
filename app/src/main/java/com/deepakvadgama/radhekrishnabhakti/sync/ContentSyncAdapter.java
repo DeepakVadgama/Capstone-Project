@@ -73,12 +73,14 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
 
         // get latest id from DB
         int latestId = getLatestId();
-        populateContent(latestId);
 
         // Get favorites for first time sync
         if (latestId == -1) {
             populateFavorites();
         }
+
+        // Populate content based on latest id
+        populateContent(latestId);
 
         // Synchronize favorites with server
         if (isFavoritesUpdated()) {
@@ -96,24 +98,31 @@ public class ContentSyncAdapter extends AbstractThreadedSyncAdapter {
 
         if (email != null) {
 
-            // Sync newly added favorites
-            final Set<String> addedFavorites = prefs.getStringSet(getContext().getString(R.string.pref_favorites_added), null);
-            if (addedFavorites != null) {
-                mService.addFavorites(email, addedFavorites);
-            }
+            try {
 
-            // Sync recently removed favorites
-            final Set<String> removedFavorites = prefs.getStringSet(getContext().getString(R.string.pref_favorites_removed), null);
-            if (removedFavorites != null) {
-                mService.removeFavorites(email, removedFavorites);
-            }
+                // Sync newly added favorites
+                final Set<String> addedFavorites = prefs.getStringSet(getContext().getString(R.string.pref_favorites_added), null);
+                if (addedFavorites != null) {
+                    mService.addFavorites(email, addedFavorites).execute().body();
+                }
 
-            // Reset flag
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putBoolean(getContext().getString(R.string.pref_favorites_updated), false);
-            editor.remove(getContext().getString(R.string.pref_favorites_added));
-            editor.remove(getContext().getString(R.string.pref_favorites_removed));
-            editor.apply();
+                // Sync recently removed favorites
+                final Set<String> removedFavorites = prefs.getStringSet(getContext().getString(R.string.pref_favorites_removed), null);
+                if (removedFavorites != null) {
+                    mService.removeFavorites(email, removedFavorites).execute().body();
+                }
+
+                // Reset flag
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean(getContext().getString(R.string.pref_favorites_updated), false);
+                editor.remove(getContext().getString(R.string.pref_favorites_added));
+                editor.remove(getContext().getString(R.string.pref_favorites_removed));
+                editor.apply();
+
+            } catch (IOException e) {
+                Log.e(LOG_TAG, e.getMessage(), e);
+                AnalyticsUtil.trackSyncError();
+            }
         }
 
     }
